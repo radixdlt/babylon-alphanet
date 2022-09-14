@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable max-nested-callbacks */
-import WebSdk from '../web-sdk'
+import WebSdk from '../alphanet-walletextension-sdk'
 import { subscribeSpyTo } from '@hirez_io/observer-spy'
 import log from 'loglevel'
 import { testHelper } from '../test-utils/helper'

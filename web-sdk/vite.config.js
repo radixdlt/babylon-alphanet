@@ -5,9 +5,9 @@ const { defineConfig } = require('vite')
 module.exports = defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/web-sdk.ts'),
-      name: 'web-sdk',
-      fileName: (format) => `web-sdk.${format}.js`,
+      entry: path.resolve(__dirname, 'lib/alphanet-walletextension-sdk.ts'),
+      name: 'alphanet-walletextension-sdk',
+      fileName: (format) => `alphanet-walletextension-sdk.${format}.js`,
     },
   },
 })

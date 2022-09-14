@@ -1,19 +1,19 @@
 {
-  "name": "@radixdlt/web-sdk",
+  "name": "@radixdlt/alphanet-walletextension-sdk",
   "version": "0.1.0",
   "license": "SEE LICENSE",
   "files": [
     "dist"
   ],
-  "main": "./dist/web-sdk.umd.js",
-  "module": "./dist/web-sdk.es.js",
+  "main": "./dist/alphanet-walletextension-sdk.umd.js",
+  "module": "./dist/alphanet-walletextension-sdk.es.js",
   "exports": {
     ".": {
-      "import": "./dist/web-sdk.es.js",
-      "require": "./dist/web-sdk.umd.js"
+      "import": "./dist/alphanet-walletextension-sdk.es.js",
+      "require": "./dist/alphanet-walletextension-sdk.umd.js"
     }
   },
-  "types": "./dist/web-sdk.d.ts",
+  "types": "./dist/alphanet-walletextension-sdk.d.ts",
   "scripts": {
     "build": "vite build && yarn build:types",
     "build:types": "tsc --project tsconfig.types.json --emitDeclarationOnly",

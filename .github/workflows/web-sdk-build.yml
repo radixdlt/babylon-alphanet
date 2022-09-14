@@ -3,7 +3,7 @@ name: Web SDK Build
 on:
   push:
     paths:
-      - "web-sdk/**"
+      - "alphanet-walletextension-sdk/**"
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./web-sdk
+        working-directory: ./alphanet-walletextension-sdk
 
     steps:
       - uses: actions/checkout@v3
@@ -37,5 +37,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: web-sdk.${{ github.sha }}
+          name: alphanet-walletextension-sdk.${{ github.sha }}
           path: .

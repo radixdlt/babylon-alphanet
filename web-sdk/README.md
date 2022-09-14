@@ -1,11 +1,11 @@
-# Radix Web SDK
+# Alphanet Wallet Extension SDK
 
 ## Usage
 
 ### Request
 
 ```typescript
-import WebSdk from '@radixdlt/web-sdk'
+import WebSdk from '@radixdlt/alphanet-walletextension-sdk'
 
 const webSdk = WebSdk()
 
@@ -21,7 +21,7 @@ const activeAddress = result.value?.accountAddresses[0]
 ### Send transaction
 
 ```typescript
-import WebSdk from '@radixdlt/web-sdk'
+import WebSdk from '@radixdlt/alphanet-walletextension-sdk'
 
 const webSdk = WebSdk()
 
