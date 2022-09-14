@@ -1,4 +1,4 @@
-name: Web SDK Build
+name: Alphanet Wallet Extension SDK build
 
 on:
   push:
