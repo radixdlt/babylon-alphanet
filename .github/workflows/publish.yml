@@ -1,0 +1,28 @@
+name: Publish Wallet Extension SDK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test_and_lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./alphanet-walletextension-sdk
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Publish alphanet-walletextension-sdk
+        run: |
+          yarn
+          yarn build
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+
