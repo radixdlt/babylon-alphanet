@@ -1,7 +1,7 @@
 {
   "name": "@radixdlt/alphanet-walletextension-sdk",
   "version": "0.1.0",
-  "license": "SEE LICENSE",
+  "license": "Apache-2.0",
   "files": [
     "dist"
   ],
