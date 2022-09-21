@@ -1,0 +1,37 @@
+{
+  "name": "PTE Browser Extension",
+  "version": "0.1.8",
+  "manifest_version": 2,
+  "description": "Radix Babylon PTE Browser Extension",
+  "icons": {
+    "256": "radix_icon256.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "browser_action": {
+    "default_title": "Radix Wallet",
+    "default_icon": "radix_icon256.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "./static/js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["./static/js/content.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "unlimitedStorage"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
