@@ -37,9 +37,7 @@ export const bridge = {
         return {
           method: 'sendTransaction',
           requestId: message.action.id,
-          payload: {
-            transactionHash: message.action.payload.transactionHash,
-          },
+          payload: message.action.payload,
         }
 
       case 'signTransactionFailure':
