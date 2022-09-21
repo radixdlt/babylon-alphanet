@@ -24,10 +24,13 @@ export type GetAccountAddressFailure = Action<
   string
 >
 
-export type SignTransaction = Action<ActionType.SignTransaction, string>
+export type SignTransaction = Action<
+  ActionType.SignTransaction,
+  { transactionManifest: string; blobs: string[] }
+>
 export type SignTransactionSuccess = Action<
   ActionType.SignTransactionSuccess,
-  Receipt
+  { transactionHash: string }
 >
 export type SignTransactionFailure = Action<
   ActionType.SignTransactionFailure,
@@ -60,54 +63,4 @@ export enum MessageTarget {
 export type Message<Action = ActionTypes> = {
   action: Action
   target: MessageTarget
-}
-
-/**
- *
- * @export
- * @interface Receipt
- */
-export type Receipt = {
-  /**
-   *
-   * @type {string}
-   * @memberof Receipt
-   */
-  transactionHash: string
-  /**
-   *
-   * @type {string}
-   * @memberof Receipt
-   */
-  status: string
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Receipt
-   */
-  outputs: Array<string>
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Receipt
-   */
-  logs: Array<string>
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Receipt
-   */
-  newPackages: Array<string>
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Receipt
-   */
-  newComponents: Array<string>
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof Receipt
-   */
-  newResources: Array<string>
 }

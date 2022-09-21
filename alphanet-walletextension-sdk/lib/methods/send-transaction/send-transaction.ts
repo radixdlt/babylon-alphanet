@@ -7,10 +7,11 @@ import { createMethodResponse } from '../create-method-response'
 import { methodType } from '../_types'
 
 export const sendTransaction =
-  (subjects: SubjectsType) => (transactionManifest: string) => {
+  (subjects: SubjectsType) =>
+  (transactionManifest: string, blobs: string[] = []) => {
     const result = createMessage({
       method: methodType.sendTransaction,
-      payload: transactionManifest,
+      payload: { transactionManifest, blobs },
     })
 
     if (result.isErr()) {
