@@ -1,0 +1,1282 @@
+openapi: 3.1.0
+info:
+  version: '0.1.0'
+  title: 'Babylon Alphanet v0 API'
+  license:
+    name: The Radix License, Version 1.0
+    url: https://www.radixfoundation.org/licenses/LICENSE-v1
+servers:
+  - url: 'https://alphanet.radixdlt.com/v0'
+tags:
+  - name: Transaction
+    x-displayName: Transaction Endpoints
+    description: To submit transactions to the network, or read information about them.
+  - name: Ledger State
+    x-displayName: Ledger State Endpoints
+    description: To query the current ledger state.
+paths:
+####################
+# v0 API Responses #
+####################
+  "/transaction/submit":
+    post:
+      summary: Transaction Submit
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0TransactionSubmitRequest"
+      responses:
+        '200':
+          description: Transaction submit response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0TransactionSubmitResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/transaction/status":
+    post:
+      summary: Read Transaction Status
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0TransactionStatusRequest"
+      responses:
+        '200':
+          description: Transaction status response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0TransactionStatusResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/transaction/receipt":
+    post:
+      summary: Read Committed Transaction
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0CommittedTransactionRequest"
+      responses:
+        '200':
+          description: Committed transaction found response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0CommittedTransactionResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: Committed transaction not found response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/state/epoch":
+    post:
+      summary: Read Current Epoch
+      tags:
+        - State
+      responses:
+        '200':
+          description: Current state response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0StateEpochResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/state/component":
+    post:
+      summary: Read component data
+      tags:
+        - State
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0StateComponentRequest"
+      responses:
+        '200':
+          description: Current state response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0StateComponentResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/state/resource":
+    post:
+      summary: Read resource data
+      tags:
+        - State
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0StateResourceRequest"
+      responses:
+        '200':
+          description: Current state response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0StateResourceResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/state/non-fungible":
+    post:
+      summary: Read non-fungible data
+      tags:
+        - State
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0StateNonFungibleRequest"
+      responses:
+        '200':
+          description: Current state response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0StateNonFungibleResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  "/state/package":
+    post:
+      summary: Read package data
+      tags:
+        - State
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/V0StatePackageRequest"
+      responses:
+        '200':
+          description: Current state response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0StatePackageResponse"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+#############################################################################################
+components:
+  schemas:
+###########################
+# GENERAL / SHARED MODELS #
+###########################
+    TransactionStatus:
+      type: string
+      enum:
+        - Succeeded
+        - Failed
+        - Rejected
+      description: The status of the transaction
+    TransactionReceipt:
+      type: object
+      description: The transaction execution receipt
+      required:
+        - status
+        - fee_summary
+        - state_updates
+      properties:
+        status:
+          $ref: "#/components/schemas/TransactionStatus"
+        fee_summary:
+          $ref: "#/components/schemas/FeeSummary"
+        state_updates:
+          $ref: "#/components/schemas/StateUpdates"
+        output:
+          type: array
+          description: The manifest line-by-line engine return data (only present if status is Succeeded)
+          items:
+            $ref: "#/components/schemas/SborData"
+        error_message:
+          type: string
+          description: Error message (only present if status is Failed or Rejected)
+    NotarizedTransaction:
+      type: object
+      required:
+        - hash
+        - payload_hex
+        - signed_intent
+        - notary_signature
+      properties:
+        hash:
+          type: string
+          description: The hex-encoded double-SHA256 hash of the notarized transaction payload. Also known as the payload_hash or the notarized_transaction_hash.
+        payload_hex:
+          type: string
+          description: The hex-encoded full notarized transaction payload
+        signed_intent:
+          $ref: "#/components/schemas/SignedTransactionIntent"
+        notary_signature:
+          $ref: "#/components/schemas/Signature"
+    SignedTransactionIntent:
+      type: object
+      required:
+        - hash
+        - intent
+        - intent_signatures
+      properties:
+        hash:
+          type: string
+          description: The hex-encoded double-SHA256 hash of the signed transaction intent. Also known as the signatures hash.
+        intent:
+          $ref: "#/components/schemas/TransactionIntent"
+        intent_signatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/SignatureWithPublicKey"
+    TransactionIntent:
+      type: object
+      required:
+        - hash
+        - header
+        - manifest
+        - blobs_hex
+      properties:
+        hash:
+          type: string
+          description: |
+            The hex-encoded double-SHA256 hash of the transaction intent.
+            Also known as the Transaction ID, Transaction Hash, or Intent Hash.
+        header:
+          $ref: "#/components/schemas/TransactionHeader"
+        manifest:
+          type: string
+          description: The decompiled transaction manifest
+        blobs_hex:
+          type: object
+          description: A map of the hex-encoded blob hash, to hex-encoded blob content
+          additionalProperties:
+            type: string
+            description: The hex-encoded blob content
+    TransactionHeader:
+      type: object
+      required:
+        - version
+        - network_id
+        - start_epoch_inclusive
+        - end_epoch_exclusive
+        - nonce
+        - notary_public_key
+        - notary_as_signatory
+        - cost_unit_limit
+        - tip_percentage
+      properties:
+        version:
+          type: integer
+          minimum: 0
+          maximum: 255
+        network_id:
+          type: integer
+          minimum: 0
+          maximum: 255
+        start_epoch_inclusive:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 10000000000
+          description: An integer between 0 and 10^10, marking the epoch from which the transaction can be submitted
+        end_epoch_exclusive:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 10000000000
+          description: An integer between 0 and 10^10, marking the epoch from which the transaction will no longer be valid, and be rejected
+        nonce:
+          type: string
+          description: A decimal-string-encoded integer between 0 and 2^64 - 1, chosen to be unique to allow replay of transaction intents
+        notary_public_key:
+          $ref: "#/components/schemas/PublicKey"
+        notary_as_signatory:
+          type: boolean
+          description: Specifies whether the notary's signature should be included in transaction signers list
+        cost_unit_limit:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 4294967295
+          description: An integer between 0 and 2^32 - 1, giving the maximum number of cost units available for transaction execution.
+        tip_percentage:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 4294967295
+          description: An integer between 0 and 2^32 - 1, giving the validator tip as a percentage amount. A value of "1" corresponds to 1% of the fee.
+    NetworkIdentifier:
+      description: The logical name of the network
+      type: string
+      example: mainnet
+    CommittedStateIdentifier:
+      type: object
+      required:
+        - state_version
+      properties:
+        state_version:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 100000000000000
+          description: An integer between 0 and 10^13, representing the state version. The state version increments with each transaction, starting at 0 pre-genesis.
+    CommittedTransaction:
+      type: object
+      required:
+        - state_version
+        - receipt
+      properties:
+        state_version:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 100000000000000
+          description: An integer between 1 and 10^13, giving the resultant state version after the transaction has been committed
+        notarized_transaction:
+          $ref: "#/components/schemas/NotarizedTransaction"
+        receipt:
+          $ref: "#/components/schemas/TransactionReceipt"
+    TransactionIdentifiers:
+      type: object
+      required:
+        - intent_hash
+        - signatures_hash
+        - payload_hash
+      properties:
+        intent_hash:
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: The hex-encoded transaction intent hash. This is also known as the Transaction Identifier hash for user transactions. This hash is SHA256(SHA256(compiled_intent))
+        signatures_hash:
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: The hex-encoded signed transaction hash. This is the hash which is signed as part of notarization. This hash is SHA256(SHA256(compiled_signed_transaction))
+        payload_hash:
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: The hex-encoded notarized transaction hash. This is also known as the payload hash. This hash is SHA256(SHA256(compiled_notarized_transaction))
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: A numeric code corresponding to the given HTTP error code.
+        message:
+          description: A human-readable error message.
+          type: string
+        trace_id:
+          description: A GUID to be used when reporting errors, to allow correlation with the Core API's error logs, in the case where the Core API details are hidden.
+          type: string
+#########################################
+# GENERAL / SHARED MODELS - Transaction #
+#########################################
+    FeeSummary:
+      description: Fees paid
+      type: object
+      required:
+        - loan_fully_repaid
+        - cost_unit_limit
+        - cost_unit_consumed
+        - cost_unit_price_attos
+        - tip_percentage
+        - xrd_burned_attos
+        - xrd_tipped_attos
+      properties:
+        loan_fully_repaid:
+          type: boolean
+          description: Specifies whether the transaction execution loan has been fully repaid.
+        cost_unit_limit:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 4294967295
+          description: An integer between 0 and 2^32 - 1, representing the maximum amount of cost units available for the transaction execution.
+        cost_unit_consumed:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 4294967295
+          description: An integer between 0 and 2^32 - 1, representing the amount of cost units consumed by the transaction execution.
+        cost_unit_price_attos:
+          type: string
+          description: |
+            A decimal-string-encoded integer between 0 and 2^255-1, which represents the total number of 10^(-18) subunits in
+            the XRD price of a single cost unit.
+        tip_percentage:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 4294967295
+          description: An integer between 0 and 2^32 - 1, specifying the validator tip as a percentage amount. A value of "1" corresponds to 1% of the fee.
+        xrd_burned_attos:
+          type: string
+          description: |
+            A decimal-string-encoded integer between 0 and 2^255-1, which represents the total number of 10^(-18) subunits in
+            the total amount of XRD burned in the transaction.
+        xrd_tipped_attos:
+          type: string
+          description: |
+            A decimal-string-encoded integer between 0 and 2^255-1, which represents the total number of 10^(-18) subunits in
+            the total amount of XRD tipped to validators in the transaction.
+    StateUpdates:
+      type: object
+      description: Transaction state updates (only present if status is Succeeded or Failed)
+      required:
+        - down_virtual_substates
+        - up_substates
+        - down_substates
+        - new_global_entities
+      properties:
+        down_virtual_substates:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubstateId"
+        up_substates:
+          type: array
+          items:
+            $ref: "#/components/schemas/UpSubstate"
+        down_substates:
+          type: array
+          items:
+            $ref: "#/components/schemas/DownSubstate"
+        new_global_entities:
+          type: array
+          items:
+            $ref: "#/components/schemas/GlobalEntityId"
+    UpSubstate:
+      type: object
+      required:
+        - substate_id
+        - version
+        - substate_hex
+        - substate_data_hash
+        - substate_data
+      properties:
+        substate_id:
+          $ref: "#/components/schemas/SubstateId"
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 100000000000000
+          description: An integer between 0 and 10^13, counting the number of times the substate was updated
+        substate_hex:
+          type: string
+          description: The hex-encoded, SBOR-encoded substate data bytes
+        substate_data_hash:
+          type: string
+          description: The hex-encoded single-SHA256 hash of the substate data bytes
+        substate_data:
+          $ref: "#/components/schemas/Substate"
+    DownSubstate:
+      type: object
+      required:
+        - substate_id
+        - substate_data_hash
+        - version
+      properties:
+        substate_id:
+          $ref: "#/components/schemas/SubstateId"
+        substate_data_hash:
+          type: string
+          description: The hex-encoded single-SHA256 hash of the substate data bytes
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 100000000000000
+          description: An integer between 0 and 10^13, counting the number of times the substate was updated
+    GlobalEntityId:
+      type: object
+      required:
+        - entity_type
+        - entity_address_hex
+        - global_address_hex
+        - global_address
+      properties:
+        entity_type:
+          $ref: "#/components/schemas/EntityType"
+        entity_address_hex:
+          type: string
+          description: The hex-encoded bytes of the entity address
+        global_address_hex:
+          type: string
+          description: The hex-encoded bytes of the entity's global address. This is currently the same as entity_address, but may change in future.
+        global_address:
+          type: string
+          description: The Bech32m-encoded human readable version of the entity's global address
+    EntityId:
+      type: object
+      required:
+        - entity_type
+        - entity_address_hex
+      properties:
+        entity_type:
+          $ref: "#/components/schemas/EntityType"
+        entity_address_hex:
+          type: string
+          description: The hex-encoded bytes of the entity address
+    SubstateId:
+      type: object
+      required:
+        - entity_type
+        - entity_address_hex
+        - substate_type
+        - substate_key_hex
+      properties:
+        entity_type:
+          $ref: "#/components/schemas/EntityType"
+        entity_address_hex:
+          type: string
+          description: The hex-encoded bytes of the entity address
+        substate_type:
+          $ref: "#/components/schemas/SubstateType"
+        substate_key_hex:
+          type: string
+          description: The hex-encoded bytes of the substate key, under the entity
+    ResourceAddress:
+      type: string
+      description: The Bech32m-encoded human readable version of the resource address
+    ComponentAddress:
+      type: string
+      description: The Bech32m-encoded human readable version of the component address
+    PackageAddress:
+      type: string
+      description: The Bech32m-encoded human readable version of the package address
+    ResourceChange:
+      type: object
+      required:
+        - resource_address
+        - component_address
+        - vault_entity_id
+        - amount_attos
+      properties:
+        resource_address:
+          $ref: "#/components/schemas/ResourceAddress"
+        component_address:
+          $ref: "#/components/schemas/ComponentAddress"
+        vault_entity_id:
+          $ref: "#/components/schemas/EntityId"
+        amount_attos:
+          type: string
+          description: |
+            A decimal-string-encoded integer between 0 and 2^255-1, which represents the total number of 10^(-18) subunits in
+            the XRD amount put or taken from the vault
+#################################################
+# GENERAL / SHARED MODELS - keys and signatures #
+#################################################
+    PublicKeyType:
+      type: string
+      enum:
+        - EcdsaSecp256k1
+        - EddsaEd25519
+    PublicKey:
+      oneOf:
+        - $ref: '#/components/schemas/EcdsaSecp256k1PublicKey'
+        - $ref: '#/components/schemas/EddsaEd25519PublicKey'
+      discriminator:
+        propertyName: key_type
+        mapping:
+          # NOTE: These need to match PublicKeyType
+          EcdsaSecp256k1: '#/components/schemas/EcdsaSecp256k1PublicKey'
+          EddsaEd25519: '#/components/schemas/EddsaEd25519PublicKey'
+    EcdsaSecp256k1PublicKey:
+      type: object
+      required:
+        - key_type
+        - key_hex
+      properties:
+        key_type:
+          $ref: '#/components/schemas/PublicKeyType'
+        key_hex:
+          type: string
+          minLength: 66
+          maxLength: 66
+          description: The hex-encoded compressed ECDSA Secp256k1 public key (33 bytes)
+    EddsaEd25519PublicKey:
+      type: object
+      required:
+        - key_type
+        - key_hex
+      properties:
+        key_type:
+          $ref: '#/components/schemas/PublicKeyType'
+        key_hex:
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: The hex-encoded compressed EdDSA Ed25519 public key (32 bytes)
+    Signature:
+      oneOf:
+        - $ref: '#/components/schemas/EcdsaSecp256k1Signature'
+        - $ref: '#/components/schemas/EddsaEd25519Signature'
+      discriminator:
+        propertyName: key_type
+        mapping:
+          # NOTE: These need to match PublicKeyType
+          EcdsaSecp256k1: '#/components/schemas/EcdsaSecp256k1Signature'
+          EddsaEd25519: '#/components/schemas/EddsaEd25519Signature'
+    EcdsaSecp256k1Signature:
+      type: object
+      required:
+        - key_type
+        - signature_hex
+      properties:
+        key_type:
+          $ref: '#/components/schemas/PublicKeyType'
+        signature_hex:
+          type: string
+          minLength: 130
+          maxLength: 130
+          description: A hex-encoded recoverable ECDSA Secp256k1 signature (65 bytes). The first byte is the recovery id, the remaining 64 bytes are the compact signature, ie CONCAT(R, s) where R and s are each 32-bytes in padded big-endian format.
+    EddsaEd25519Signature:
+      type: object
+      required:
+        - key_type
+        - signature_hex
+      properties:
+        key_type:
+          $ref: '#/components/schemas/PublicKeyType'
+        signature_hex:
+          type: string
+          minLength: 128
+          maxLength: 128
+          description: A hex-encoded EdDSA Ed25519 signature (64 bytes). This is CONCAT(R, s) where R and s are each 32-bytes in padded big-endian format.
+    SignatureWithPublicKey:
+      oneOf:
+        - $ref: '#/components/schemas/EcdsaSecp256k1SignatureWithPublicKey'
+        - $ref: '#/components/schemas/EddsaEd25519SignatureWithPublicKey'
+      discriminator:
+        propertyName: key_type
+        mapping:
+          # NOTE: These need to match PublicKeyType
+          EcdsaSecp256k1: '#/components/schemas/EcdsaSecp256k1SignatureWithPublicKey'
+          EddsaEd25519: '#/components/schemas/EddsaEd25519SignatureWithPublicKey'
+    EcdsaSecp256k1SignatureWithPublicKey:
+      type: object
+      required:
+        - key_type
+        - recoverable_signature
+      description: Because ECDSA has recoverable signatures, this only includes a signature
+      properties:
+        key_type:
+          $ref: '#/components/schemas/PublicKeyType'
+        recoverable_signature:
+          $ref: '#/components/schemas/EcdsaSecp256k1Signature'
+    EddsaEd25519SignatureWithPublicKey:
+      type: object
+      required:
+        - key_type
+        - public_key
+        - signature
+      description: The EDDSA public key and signature 
+      properties:
+        key_type:
+          $ref: '#/components/schemas/PublicKeyType'
+        public_key:
+          $ref: '#/components/schemas/EddsaEd25519PublicKey'
+        signature:
+          $ref: '#/components/schemas/EddsaEd25519Signature'
+#######################################
+# GENERAL / SHARED MODELS - substates #
+#######################################
+    EntityType:
+      type: string
+      enum:
+        - System
+        - ResourceManager
+        - Component
+        - Package
+        - Vault
+        - KeyValueStore
+    Substate:
+      oneOf:
+        - $ref: '#/components/schemas/SystemSubstate'
+        - $ref: '#/components/schemas/ResourceManagerSubstate'
+        - $ref: '#/components/schemas/ComponentInfoSubstate'
+        - $ref: '#/components/schemas/ComponentStateSubstate'
+        - $ref: '#/components/schemas/PackageSubstate'
+        - $ref: '#/components/schemas/VaultSubstate'
+        - $ref: '#/components/schemas/NonFungibleSubstate'
+        - $ref: '#/components/schemas/KeyValueStoreEntrySubstate'
+      discriminator:
+        propertyName: substate_type
+        mapping:
+          # NOTE: These need to match SubstateType options below
+          System: '#/components/schemas/SystemSubstate'
+          ResourceManager: '#/components/schemas/ResourceManagerSubstate'
+          ComponentInfo: '#/components/schemas/ComponentInfoSubstate'
+          ComponentState: '#/components/schemas/ComponentStateSubstate'
+          Package: '#/components/schemas/PackageSubstate'
+          Vault: '#/components/schemas/VaultSubstate'
+          NonFungible: '#/components/schemas/NonFungibleSubstate'
+          KeyValueStoreEntry: '#/components/schemas/KeyValueStoreEntrySubstate'
+    SubstateType:
+      type: string
+      enum:
+        - System
+        - ResourceManager
+        - ComponentInfo
+        - ComponentState
+        - Package
+        - Vault
+        - NonFungible
+        - KeyValueStoreEntry
+    SubstateBase:
+      type: object
+      required:
+        - entity_type
+        - substate_type
+      properties:
+        entity_type:
+          $ref: '#/components/schemas/EntityType'
+        substate_type:
+          $ref: '#/components/schemas/SubstateType'
+    SystemSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - epoch
+          properties:
+            epoch:
+              type: integer
+              format: int64
+              minimum: 0
+              maximum: 10000000000
+              description: An integer between 0 and 10^10, marking the current epoch
+    ResourceManagerSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - resource_type
+            - metadata
+            - total_supply_attos
+          properties:
+            resource_type:
+              $ref: '#/components/schemas/ResourceType'
+            fungible_divisibility:
+              type: integer
+              minimum: 0
+              maximum: 18
+            metadata:
+              type: array
+              items:
+                type: object
+                required:
+                  - key
+                  - value
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+            total_supply_attos:
+              type: string
+              description: |
+                A decimal-string-encoded integer between 0 and 2^255-1, which represents the total number of 10^(-18) subunits in
+                the total supply of this resource.
+    ResourceType:
+      type: string
+      enum:
+        - Fungible
+        - NonFungible
+    ComponentInfoSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - package_address
+            - blueprint_name
+          properties:
+            package_address:
+              $ref: '#/components/schemas/PackageAddress'
+            blueprint_name:
+              type: string
+    ComponentStateSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - data_struct
+          properties:
+            data_struct:
+              $ref: '#/components/schemas/DataStruct'
+    DataStruct:
+      type: object
+      required:
+        - struct_data
+        - owned_entities
+        - referenced_entities
+      properties:
+        struct_data:
+          $ref: '#/components/schemas/SborData'
+          description: The struct data
+        owned_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        referenced_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+    SborData:
+      type: object
+      required:
+        - data_hex
+        - data_json
+      properties:
+        data_hex:
+          type: string
+          description: The hex-encoded, raw SBOR-encoded data
+        data_json:
+          description: An untyped JSON body representing the content of the SBOR data
+    PackageSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - code_hex
+          properties:
+            code_hex:
+              type: string
+              description: The hex-encoded package code
+    VaultSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - resource_amount
+          properties:
+            resource_amount:
+              $ref: '#/components/schemas/ResourceAmount'
+    ResourceAmount:
+      oneOf:
+        - $ref: '#/components/schemas/FungibleResourceAmount'
+        - $ref: '#/components/schemas/NonFungibleResourceAmount'
+      discriminator:
+        propertyName: resource_type
+        mapping:
+          # NOTE: These need to match ResourceType options
+          Fungible: '#/components/schemas/FungibleResourceAmount'
+          NonFungible: '#/components/schemas/NonFungibleResourceAmount'
+    ResourceAmountBase:
+      type: object
+      required:
+        - resource_type
+        - resource_address
+      properties:
+        resource_type:
+          $ref: '#/components/schemas/ResourceType'
+        resource_address:
+          $ref: '#/components/schemas/ResourceAddress'
+    FungibleResourceAmount:
+      allOf:
+        - $ref: '#/components/schemas/ResourceAmountBase'
+        - type: object
+          required:
+            - amount_attos
+          properties:
+            amount_attos:
+              type: string
+              description: |
+                The string-encoded decimal subunits of the amount (10^-18) in a signed 256-bit integer.
+                This is string-encoded as it doesn't fit well into common numeric types.
+    NonFungibleResourceAmount:
+      allOf:
+        - $ref: '#/components/schemas/ResourceAmountBase'
+        - type: object
+          required:
+            - nf_ids_hex
+          properties:
+            nf_ids_hex:
+              type: array
+              items:
+                type: string
+                description: The hex-encoded bytes of the non-fungible ids
+    NonFungibleSubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - nf_id_hex
+            - is_deleted
+          properties:
+            nf_id_hex:
+              type: string
+              description: The hex-encoded bytes of its non-fungible id
+            is_deleted:
+              type: boolean
+            non_fungible_data:
+              $ref: '#/components/schemas/NonFungibleData'
+    NonFungibleData:
+      type: object
+      description: Only present if the non fungible isn't deleted
+      required:
+        - immutable_data
+        - mutable_data
+      properties:
+        immutable_data:
+          $ref: '#/components/schemas/DataStruct'
+        mutable_data:
+          $ref: '#/components/schemas/DataStruct'
+    KeyValueStoreEntrySubstate:
+      allOf:
+        - $ref: '#/components/schemas/SubstateBase'
+        - type: object
+          required:
+            - key_hex
+            - is_deleted
+          properties:
+            key_hex:
+              type: string
+              description: The hex-encoded bytes of its key
+            is_deleted:
+              type: boolean
+            data_struct:
+              $ref: '#/components/schemas/DataStruct'
+############################################################################################################
+# V0
+###################################
+# REQUEST: /transaction/submit #
+################################### 
+    V0TransactionSubmitRequest:
+      type: object
+      required:
+        - notarized_transaction_hex
+      properties:
+        notarized_transaction_hex:
+          description: A hex-encoded, compiled notarized transaction.
+          type: string
+    V0TransactionSubmitResponse:
+      type: object
+      required:
+        - duplicate
+      properties:
+        duplicate:
+          description: Is true if the transaction is a duplicate of an existing transaction in the mempool.
+          type: boolean
+###################################
+# REQUEST: /transaction/status #
+###################################
+    V0TransactionStatusRequest:
+      type: object
+      required:
+        - intent_hash
+      properties:
+        intent_hash:
+          description: A hex-encoded transaction intent hash. SHA256(SHA256(compiled_transaction_intent))
+          minLength: 66
+          maxLength: 66
+          type: string
+    V0TransactionStatusResponse:
+      type: object
+      required:
+        - intent_status
+        - known_payloads
+      properties:
+        intent_status:
+          type: string
+          description: The status of the transaction intent
+          enum:
+            - CommittedSuccess
+            - CommittedFailure
+            - InMempool
+            - Rejected
+            - Unknown
+        known_payloads:
+          type: array
+          items:
+            $ref: "#/components/schemas/V0TransactionPayloadStatus"
+    V0TransactionPayloadStatus:
+      type: object
+      required:
+        - payload_hash
+        - status
+      properties:
+        payload_hash:
+          type: string
+        status:
+          type: string
+          description: The status of the transaction payload, as per this node
+          enum:
+            - CommittedSuccess
+            - CommittedFailure
+            - InMempool
+            - Rejected
+        error_message:
+          description: An explanation for the error, if failed or rejected
+          type: string
+####################################
+# REQUEST: /transaction/receipt #
+####################################
+    V0CommittedTransactionRequest:
+      type: object
+      required:
+        - intent_hash
+      properties:
+        intent_hash:
+          description: A hex-encoded transaction intent hash. SHA256(SHA256(compiled_transaction_intent))
+          minLength: 66
+          maxLength: 66
+          type: string
+    V0CommittedTransactionResponse:
+      type: object
+      required:
+        - committed
+      properties:
+        committed:
+          $ref: "#/components/schemas/CommittedTransaction"
+############################
+# REQUEST: /state/epoch #
+############################
+    # No request body required
+    V0StateEpochResponse:
+      type: object
+      required:
+        - epoch
+      properties:
+        epoch:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 10000000000
+          description: An integer between 0 and 10^10, marking the current epoch
+################################
+# REQUEST: /state/component #
+################################
+    V0StateComponentRequest:
+      type: object
+      required:
+        - component_address
+      properties:
+        component_address:
+          type: string
+          description: The Bech32m-encoded human readable version of the component's global address
+    V0StateComponentResponse:
+      type: object
+      required:
+        - info
+        - state
+        - owned_vaults
+        - descendent_ids
+      properties:
+        info:
+          $ref: "#/components/schemas/Substate"
+        state:
+          $ref: "#/components/schemas/Substate"
+        owned_vaults:
+          type: array
+          description: Any vaults owned directly or indirectly by the component
+          items:
+            $ref: "#/components/schemas/Substate"
+        descendent_ids:
+          type: array
+          description: Any descendent nodes owned directly or indirectly by the component
+          items:
+            $ref: "#/components/schemas/V0StateComponentDescendentId"
+    V0StateComponentDescendentId:
+      type: object
+      required:
+        - parent
+        - entity_id
+        - depth
+      properties:
+        parent:
+          $ref: "#/components/schemas/SubstateId"
+        entity_id:
+          $ref: "#/components/schemas/EntityId"
+        depth:
+          description: Depth under component
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+###############################
+# REQUEST: /state/resource #
+###############################
+    V0StateResourceRequest:
+      type: object
+      required:
+        - resource_address
+      properties:
+        resource_address:
+          type: string
+          description: The Bech32m-encoded human readable version of the resource's global address
+    V0StateResourceResponse:
+      type: object
+      required:
+        - manager
+      properties:
+        manager:
+          $ref: "#/components/schemas/Substate"
+###################################
+# REQUEST: /state/non-fungible #
+###################################
+    V0StateNonFungibleRequest:
+      type: object
+      required:
+        - resource_address
+        - non_fungible_id_hex
+      properties:
+        resource_address:
+          type: string
+          description: The Bech32m-encoded human readable version of the resource's global address
+        non_fungible_id_hex:
+          type: string
+          description: The hex-encoded non-fungible id
+    V0StateNonFungibleResponse:
+      type: object
+      required:
+        - non_fungible
+      properties:
+        non_fungible:
+          $ref: "#/components/schemas/Substate"
+##############################
+# REQUEST: /state/package #
+##############################
+    V0StatePackageRequest:
+      type: object
+      required:
+        - package_address
+      properties:
+        package_address:
+          type: string
+          description: The Bech32m-encoded human readable version of the package's global address
+    V0StatePackageResponse:
+      type: object
+      required:
+        - package
+      properties:
+        package:
+          $ref: "#/components/schemas/Substate"

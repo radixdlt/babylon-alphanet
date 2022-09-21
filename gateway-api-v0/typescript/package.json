@@ -1,0 +1,29 @@
+{
+  "name": "babylon-alphanet-v0-gateway-examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./built/examples-node.js",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node ./built/examples-node.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radixdlt/babylon-alphanet.git"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "bugs": {
+    "url": "https://github.com/radixdlt/babylon-alphanet/issues"
+  },
+  "homepage": "https://github.com/radixdlt/babylon-alphanet#readme",
+  "dependencies": {
+    "node-fetch": "2.6.7",
+    "typescript": "4.8.3"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.6.2"
+  }
+}
