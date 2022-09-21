@@ -15,6 +15,7 @@
   },
   "types": "./dist/alphanet-walletextension-sdk.d.ts",
   "scripts": {
+    "dev": "vite serve sandbox",
     "build": "vite build && yarn build:types",
     "build:types": "tsc --project tsconfig.types.json --emitDeclarationOnly",
     "preview": "vite preview",
