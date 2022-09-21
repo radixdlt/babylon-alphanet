@@ -1,0 +1,35 @@
+name: Alphanet Wallet Extension build
+
+on:
+  push:
+    paths:
+      - "alphanet-walletextension/**"
+  workflow_dispatch:
+
+jobs:
+  test_and_lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./alphanet-walletextension
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install dependencies
+        run: yarn add ./radixdlt-transaction-library-v0.5.0.tgz
+
+      - name: Test
+        run: yarn test
+
+      - name: Build extension
+        run: yarn build
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: alphanet-walletextension.${{ github.sha }}
+          path: alphanet-walletextension/dist
