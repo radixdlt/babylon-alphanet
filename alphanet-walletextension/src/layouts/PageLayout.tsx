@@ -1,6 +1,5 @@
 import { Alert, Box } from "@mui/material";
 import React from "react";
-import { Version } from "../footer/Version";
 import { Header } from "../header/Header";
 
 export const PageLayout: React.FC = ({ children }) => (
@@ -8,7 +7,7 @@ export const PageLayout: React.FC = ({ children }) => (
     sx={{
       width: "320px",
       height: "600px",
-      overflow: "auto",
+      overflow: "hidden",
     }}
   >
     <Box
@@ -27,7 +26,6 @@ export const PageLayout: React.FC = ({ children }) => (
     <Box sx={{ pl: 1, pr: 1 }}>
       <Header />
       <Box sx={{ minHeight: 515 }}>{children}</Box>
-      <Version />
     </Box>
   </Box>
 );

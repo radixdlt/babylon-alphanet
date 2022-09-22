@@ -1,25 +1,9 @@
 import { err, ok, ResultAsync } from 'neverthrow'
+import { errorIdentity } from './error-identity'
+import { fromResponse } from './utils'
+import { ErrorResponse } from './_types'
 
-type ErrorResponse = {
-  code: number
-  message: string
-  trace_id: string
-  error?: any
-}
-
-const errorIdentity =
-  (message: string) =>
-  (error: any): ErrorResponse =>
-    'code' in error
-      ? error
-      : {
-          code: -1,
-          message,
-          trace_id: '',
-          error,
-        }
-
-const intentStatus = {
+export const intentStatus = {
   CommittedSuccess: 'CommittedSuccess',
   CommittedFailure: 'CommittedFailure',
   InMempool: 'InMempool',
@@ -27,13 +11,13 @@ const intentStatus = {
   Unknown: 'Unknown',
 } as const
 
-const transactionStatus = {
+export const transactionStatus = {
   Succeeded: 'Succeeded',
   Failed: 'Failed',
   Rejected: 'Rejected',
 } as const
 
-type IntentStatus = keyof typeof intentStatus
+export type IntentStatus = keyof typeof intentStatus
 
 type SignatureWithPublicKey = {}
 
@@ -66,9 +50,9 @@ type EntityType = {}
 
 type GlobalEntityId = {
   entity_type: EntityType
-  entity_address: string
-  global_address_bytes: string
-  global_address_str: string
+  entity_address_hex: string
+  global_address_hex: string
+  global_address: string
 }
 
 type StateUpdates = {
@@ -80,7 +64,7 @@ type SborData = {
   data_json: string
 }
 
-type TransactionReceipt = {
+export type TransactionReceipt = {
   status: keyof typeof transactionStatus
   fee_summary: FeeSummary
   state_updates: StateUpdates
@@ -92,21 +76,6 @@ type CommittedTransaction = {
   receipt: TransactionReceipt
 }
 
-const fromResponse = (response: Response) =>
-  ResultAsync.fromPromise(response.text(), (error) => error as Error)
-    .andThen((text) => {
-      try {
-        return ok(JSON.parse(text))
-      } catch (error) {
-        return err({
-          status: response.status,
-          url: response.url,
-          message: `core API error (status ${response.status})`,
-        })
-      }
-    })
-    .map((data) => ({ data, status: response.status }))
-
 const CoreApi = (baseUrl: string) => {
   const request = <T>(data: any, ...input: Parameters<typeof fetch>) => {
     const headers = input[1]?.headers || {}
@@ -116,16 +85,17 @@ const CoreApi = (baseUrl: string) => {
         method: 'POST',
         headers: {
           ...headers,
-
           'content-type': 'application/json',
         },
         body: JSON.stringify(data),
       }),
       (error) => error as Error
     )
-      .andThen(fromResponse)
+      .andThen((response) => fromResponse<T>(response))
       .andThen(({ data, status }) =>
-        status === 200 ? ok<T, never>(data) : err<never, ErrorResponse>(data)
+        status === 200
+          ? ok<T, never>(data)
+          : err<never, ErrorResponse>(data as ErrorResponse)
       )
       .mapErr(errorIdentity('Core API error'))
   }
@@ -138,10 +108,10 @@ const CoreApi = (baseUrl: string) => {
     /**
      * submit a notarized transaction
      */
-    submitTransaction: (notarized_transaction: string) =>
+    submitTransaction: (notarized_transaction_hex: string) =>
       request<{ duplicate: boolean }>(
         {
-          notarized_transaction,
+          notarized_transaction_hex,
         },
         `${baseUrl}/v0/transaction/submit`
       ),

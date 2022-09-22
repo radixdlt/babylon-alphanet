@@ -1,7 +1,7 @@
 import { alphanetSdk } from "./alphanet-sdk";
-import { coreApi } from "./core-api";
 import fs from "fs";
 import path from "path";
+import { alphanetAddresses } from "./_types";
 
 const blobDirPath = path.join(__dirname, "..", "..", "..", "blobs");
 const blob1 = fs.readFileSync(
@@ -10,18 +10,8 @@ const blob1 = fs.readFileSync(
 const blob2 = fs.readFileSync(
   `${blobDirPath}/cfc384e2ab7ae451f80bdb731081d000ddf24317d53261b2183b0c87a4f263c5.blob`
 );
-const xrdAddress =
-  "resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9";
 
 describe("alphanet sdk", () => {
-  it("should get current epoch", async () => {
-    const result = await coreApi.epoch();
-
-    if (result.isErr()) throw result.error;
-
-    expect(result.value).toBeDefined();
-  });
-
   describe("transactions", () => {
     let privateKeyHex: string;
     let accountAddress: string;
@@ -36,9 +26,8 @@ describe("alphanet sdk", () => {
         });
 
       if (result.isErr()) {
-        throw result.error.error;
+        throw result.error;
       }
-
       privateKeyHex = result.value.privateKeyHex;
       accountAddress = result.value.accountAddress;
     }, 60_000);
@@ -77,7 +66,7 @@ describe("alphanet sdk", () => {
         .map(
           ({ receipt }) =>
             receipt.committed.receipt.state_updates.new_global_entities[0]
-              .global_address_str
+              .global_address
         )
         .map((result) => {
           console.log("Trying to instantiate component...");
@@ -99,7 +88,7 @@ describe("alphanet sdk", () => {
         .map(
           ({ receipt }) =>
             receipt.committed.receipt.state_updates.new_global_entities[1]
-              .global_address_str
+              .global_address
         )
         .map((result) => {
           console.log("Trying to call method on component...");
@@ -109,8 +98,8 @@ describe("alphanet sdk", () => {
           alphanetSdk().submitTransaction(
             privateKeyHex,
             `CALL_METHOD ComponentAddress("${accountAddress}") "lock_fee" Decimal("100");
-             CALL_METHOD ComponentAddress("${accountAddress}") "withdraw_by_amount" Decimal("5") ResourceAddress("${xrdAddress}");
-             TAKE_FROM_WORKTOP_BY_AMOUNT Decimal("5") ResourceAddress("${xrdAddress}") Bucket("bucket1");
+             CALL_METHOD ComponentAddress("${accountAddress}") "withdraw_by_amount" Decimal("5") ResourceAddress("${alphanetAddresses.xrd}");
+             TAKE_FROM_WORKTOP_BY_AMOUNT Decimal("5") ResourceAddress("${alphanetAddresses.xrd}") Bucket("bucket1");
              CALL_METHOD ComponentAddress("${componentAddress}") "buy_gumball" Bucket("bucket1");
              CALL_METHOD ComponentAddress("${accountAddress}") "deposit_batch" Expression("ENTIRE_WORKTOP");`,
             []

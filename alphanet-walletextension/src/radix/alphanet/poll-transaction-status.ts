@@ -8,10 +8,11 @@ import {
   interval,
   map,
   merge,
-  tap,
+  of,
   timer,
 } from "rxjs";
 import { coreApi, IntentStatus } from "./core-api";
+import { errorIdentity } from "./error-identity";
 import { ErrorResponse } from "./_types";
 
 export const pollTransactionStatus = (
@@ -21,7 +22,7 @@ export const pollTransactionStatus = (
   ResultAsync.fromPromise(
     firstValueFrom(
       merge(
-        interval(1000).pipe(
+        merge(interval(1000), of(true)).pipe(
           concatMap(() => from(coreApi.status(transactionIntentHash))),
           filter(
             (result) =>
@@ -29,13 +30,7 @@ export const pollTransactionStatus = (
           )
         ),
         timer(config.alphanet.pollTransactionStatusTimeout).pipe(
-          map(() =>
-            err({
-              code: "-2",
-              message: "invalid transaction manifest",
-              trace_id: "",
-            })
-          )
+          map(() => err(errorIdentity("Invalid transaction manifest")({})))
         )
       )
     ),

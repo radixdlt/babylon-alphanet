@@ -2,7 +2,6 @@ import { CompileTransactionIntentRequest } from "@radixdlt/transaction-library";
 import { errAsync, okAsync } from "neverthrow";
 import { errorIdentity } from "./error-identity";
 import { getTransactionService } from "./get-transaction-service";
-import { ErrorResponse } from "./_types";
 
 export const compileTransactionIntent = (
   compileTransactionIntentRequest: CompileTransactionIntentRequest

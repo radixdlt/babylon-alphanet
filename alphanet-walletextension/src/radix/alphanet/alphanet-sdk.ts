@@ -18,6 +18,7 @@ import { errorIdentity } from "./error-identity";
 import { pollTransactionStatus } from "./poll-transaction-status";
 
 export const alphanetSdk = () => {
+  const apiClient = coreApi;
   const createKeyPair = EcdsaSecp256k1KeyPair.newRandom;
   const keyPairFromPrivateKeyHex = EcdsaSecp256k1KeyPair.newFromString;
 
@@ -29,11 +30,11 @@ export const alphanetSdk = () => {
     ]).mapErr(errorIdentity("Failed to get committed transaction status"));
 
   const submitTransactionAndPollUntilCommitted = (
-    notarized_transaction: string,
+    notarizedTransactionHex: string,
     transactionIntent: TransactionIntent
   ) =>
-    coreApi
-      .submitTransaction(notarized_transaction)
+    apiClient
+      .submitTransaction(notarizedTransactionHex)
       .andThen(() => compileTransactionIntent(transactionIntent))
       .andThen(createTransactionHash)
       .andThen((intentHash) =>
@@ -78,7 +79,7 @@ export const alphanetSdk = () => {
             )
           )
           .andThen((intentHash) =>
-            coreApi
+            apiClient
               .receipt(intentHash)
               .map((receipt) => ({ intentHash, receipt }))
           )
@@ -116,15 +117,15 @@ export const alphanetSdk = () => {
               transactionIntentWithSignatures.transaction_intent
             )
           )
-          .andThen(coreApi.receipt)
-          .andThen((receipt) =>
-            receipt.committed.receipt.status === "Succeeded"
+          .andThen(apiClient.receipt)
+          .andThen((receipt) => {
+            return receipt.committed.receipt.status === "Succeeded"
               ? ok(
                   receipt.committed.receipt.state_updates.new_global_entities[0]
-                    .global_address_str
+                    .global_address
                 )
-              : err(errorIdentity("Transaction failed")(receipt))
-          )
+              : err(errorIdentity("Transaction failed")(receipt));
+          })
           .map((accountAddress) => ({
             accountAddress,
             privateKeyHex: keyPair.privateKeyHex(),
@@ -134,7 +135,7 @@ export const alphanetSdk = () => {
 
   const getTransactionReceipt = (intentHash: string) =>
     pollTransactionStatusUntilCommitted(intentHash)
-      .andThen(() => coreApi.receipt(intentHash))
+      .andThen(() => apiClient.receipt(intentHash))
       .map((response) => response.committed);
 
   return { createAccount, getTransactionReceipt, submitTransaction };
