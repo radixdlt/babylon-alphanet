@@ -2,6 +2,7 @@ import { Curve, TransactionHeader } from "@radixdlt/transaction-library";
 import { secureRandom } from "crypto/secure-random";
 import { ResultAsync } from "neverthrow";
 import { coreApi } from "./core-api";
+import { errorIdentity } from "./error-identity";
 import { ErrorResponse } from "./_types";
 
 export const createTransactionHeader = (
@@ -26,13 +27,4 @@ export const createTransactionHeader = (
         tip_percentage: 0,
       }))
     )
-    .mapErr((error) =>
-      "code" in error
-        ? error
-        : {
-            code: -1,
-            message: "Could not construct transaction header",
-            trace_id: "",
-            error,
-          }
-    );
+    .mapErr(errorIdentity("Could not construct transaction header"));

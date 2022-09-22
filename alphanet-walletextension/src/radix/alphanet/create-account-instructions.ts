@@ -19,10 +19,7 @@ export const createAccountInstructions = (
       { type: ValueKind.Decimal, value: "10" },
     ])
     .callMethod(alphanetAddresses.faucet, "free_xrd")
-    .takeFromWorktop(
-      "resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9",
-      "xrd"
-    )
+    .takeFromWorktop(alphanetAddresses.xrd, "xrd")
     .callFunction(
       alphanetAddresses.createAccountComponent,
       "Account",

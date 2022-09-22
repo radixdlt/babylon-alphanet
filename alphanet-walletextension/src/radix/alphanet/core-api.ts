@@ -1,5 +1,6 @@
 import { err, ok, ResultAsync } from "neverthrow";
 import { errorIdentity } from "./error-identity";
+import { fromResponse } from "./utils";
 import { ErrorResponse } from "./_types";
 
 export const intentStatus = {
@@ -49,9 +50,9 @@ type EntityType = {};
 
 type GlobalEntityId = {
   entity_type: EntityType;
-  entity_address: string;
-  global_address_bytes: string;
-  global_address_str: string;
+  entity_address_hex: string;
+  global_address_hex: string;
+  global_address: string;
 };
 
 type StateUpdates = {
@@ -75,21 +76,6 @@ type CommittedTransaction = {
   receipt: TransactionReceipt;
 };
 
-const fromResponse = (response: Response) =>
-  ResultAsync.fromPromise(response.text(), (error) => error as Error)
-    .andThen((text) => {
-      try {
-        return ok(JSON.parse(text));
-      } catch (error) {
-        return err({
-          status: response.status,
-          url: response.url,
-          message: `core API error (status ${response.status})`,
-        });
-      }
-    })
-    .map((data) => ({ data, status: response.status }));
-
 const CoreApi = (baseUrl: string) => {
   const request = <T>(data: any, ...input: Parameters<typeof fetch>) => {
     const headers = input[1]?.headers || {};
@@ -105,10 +91,12 @@ const CoreApi = (baseUrl: string) => {
       }),
       (error) => error as Error
     )
-      .andThen(fromResponse)
-      .andThen(({ data, status }) =>
-        status === 200 ? ok<T, never>(data) : err<never, ErrorResponse>(data)
-      )
+      .andThen((response) => fromResponse<T>(response))
+      .andThen(({ data, status }) => {
+        return status === 200
+          ? ok<T, never>(data)
+          : err<never, ErrorResponse>(data as ErrorResponse);
+      })
       .mapErr(errorIdentity("Core API error"));
   };
 
@@ -120,10 +108,10 @@ const CoreApi = (baseUrl: string) => {
     /**
      * submit a notarized transaction
      */
-    submitTransaction: (notarized_transaction: string) =>
+    submitTransaction: (notarized_transaction_hex: string) =>
       request<{ duplicate: boolean }>(
         {
-          notarized_transaction,
+          notarized_transaction_hex,
         },
         `${baseUrl}/v0/transaction/submit`
       ),

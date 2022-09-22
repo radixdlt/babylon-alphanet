@@ -1,6 +1,5 @@
-import { ok, ResultAsync } from "neverthrow";
+import { ResultAsync } from "neverthrow";
 import { Buffer } from "buffer";
-import { ErrorResponse } from "./_types";
 import { errorIdentity } from "./error-identity";
 
 const sha256 = (buffer: Buffer) =>
