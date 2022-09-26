@@ -1,5 +1,6 @@
 import loglevel from 'loglevel'
 import Sdk from '../lib/alphanet-walletextension-sdk'
+import test from 'Alphanet SDK'
 import blob1 from './blobs/4911392e318eeea9b97f727268e227cfa8fc653465cd3bbd8c3978f4e02a4a0c.hex?raw'
 import blob2 from './blobs/cfc384e2ab7ae451f80bdb731081d000ddf24317d53261b2183b0c87a4f263c5.hex?raw'
 import { coreApi } from './core-api/core-api'
