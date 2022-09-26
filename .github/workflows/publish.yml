@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test_and_lint:
+  publish-npmjs:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Publish alphanet-walletextension-sdk
         run: |
