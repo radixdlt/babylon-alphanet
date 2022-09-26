@@ -3,7 +3,10 @@ import { sendMessageToDapp } from "messages/utils";
 import { ActionType, MessageTarget } from "messages/_types";
 import { errAsync, okAsync } from "neverthrow";
 import { alphanetSdk } from "radix/alphanet/alphanet-sdk";
-import { TransactionReceipt } from "radix/alphanet/core-api";
+import {
+  CommittedTransaction,
+  TransactionReceipt,
+} from "radix/alphanet/core-api";
 import { toast } from "react-toastify";
 import { Subject } from "rxjs";
 import { store } from "store/store";
@@ -14,7 +17,10 @@ export type Transaction = {
   id: string;
   transactionManifest: string;
   blobs: string[];
-  receipt?: TransactionReceipt;
+  receipt?: {
+    committed: CommittedTransaction;
+  };
+  intentHash?: string;
   messageMeta?: { tabId: number; url: string; actionId: string };
 };
 
@@ -111,9 +117,11 @@ export const submitTransaction = async (input: Transaction) =>
           createdAt: Date.now(),
         });
       }
+
       return updateTransaction({
         ...input,
-        receipt: receipt.committed.receipt,
+        receipt,
+        intentHash,
       });
     })
     .mapErr((error) => {
