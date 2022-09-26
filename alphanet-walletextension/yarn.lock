@@ -1732,7 +1732,7 @@
 
 "@radixdlt/transaction-library@./radixdlt-transaction-library-v0.5.0.tgz":
   version "0.5.0"
-  resolved "./radixdlt-transaction-library-v0.5.0.tgz#9dd3b69fd93e5233e9e7925ff234b223841f1a96"
+  resolved "./radixdlt-transaction-library-v0.5.0.tgz#f93d32d9f90dcec6ee9f1e4a7a9a4b00d5ff6007"
   dependencies:
     crypto-js "^4.1.1"
     secp256k1 "^4.0.3"

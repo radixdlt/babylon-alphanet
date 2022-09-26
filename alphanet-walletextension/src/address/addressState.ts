@@ -24,7 +24,7 @@ export const getActiveAddress = () =>
 export const addAddress = (address: Address) =>
   getAddresses()
     .andThen((addresses) =>
-      store.setItem({ addresses: [address, ...addresses] })
+      store.setItem({ addresses: [...addresses, address] })
     )
     .map(() => address);
 

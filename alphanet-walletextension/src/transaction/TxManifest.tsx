@@ -1,4 +1,5 @@
 import { Box, Button, TextField } from "@mui/material";
+import { useActiveAddress } from "address/useActiveAddress";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppRoute } from "routes";
@@ -7,13 +8,17 @@ import { addTransaction } from "./transactionState";
 export const TxManifest: React.FC = () => {
   const [txManifest, setTxManifest] = useState<string>("");
   const navigate = useNavigate();
+  const activeAddress = useActiveAddress();
+  const lockFeeTextRow = activeAddress
+    ? `CALL_METHOD ComponentAddress("${activeAddress.accountAddress}") "lock_fee" Decimal("100");\n`
+    : "";
 
   return (
     <Box>
       <TextField
         size="small"
         fullWidth
-        defaultValue={txManifest}
+        value={txManifest}
         onChange={(ev) => {
           setTxManifest(ev.target.value);
         }}
@@ -32,12 +37,21 @@ export const TxManifest: React.FC = () => {
         maxRows={15}
       />
       <Button
+        variant="text"
+        onClick={() => {
+          setTxManifest((prev) => `${lockFeeTextRow}${prev}`);
+        }}
+        sx={{ mb: 2 }}
+        fullWidth
+      >
+        Add lock fee
+      </Button>
+      <Button
         variant="outlined"
         onClick={async () => {
           await addTransaction(txManifest, []);
           navigate(AppRoute.Transactions);
         }}
-        sx={{ mb: 2 }}
         fullWidth
       >
         Add manifest

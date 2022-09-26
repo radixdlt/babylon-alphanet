@@ -43,11 +43,25 @@ const EmptyState = () => {
   );
 };
 
-const Receipt: React.FC<{ receipt: Transaction["receipt"] }> = ({
-  receipt,
-}) => {
+const Receipt: React.FC<{
+  receipt: Transaction["receipt"];
+  intentHash: string;
+}> = ({ receipt, intentHash }) => {
   if (!receipt) return null;
-  const stringifiedReceipt = JSON.stringify(receipt, null, 2);
+  const stringifiedReceipt = JSON.stringify(
+    {
+      intentHash,
+      newGlobalEntities:
+        receipt?.committed?.receipt?.state_updates?.new_global_entities!.map(
+          (item) => ({
+            entity_type: item.entity_type,
+            global_address: item.global_address,
+          })
+        ) || "",
+    },
+    null,
+    2
+  );
   return (
     <Box>
       <Box sx={{ mb: 2 }}>
@@ -62,9 +76,9 @@ const Receipt: React.FC<{ receipt: Transaction["receipt"] }> = ({
           <AccordionDetails>
             <TextField
               value={
-                stringifiedReceipt.length > 100000
+                stringifiedReceipt.length > 100_000
                   ? "Receipt is too large. Preview disabled"
-                  : " "
+                  : stringifiedReceipt
               }
               multiline
               size="small"
@@ -72,7 +86,6 @@ const Receipt: React.FC<{ receipt: Transaction["receipt"] }> = ({
               InputProps={{
                 readOnly: true,
               }}
-              label="Receipt"
               sx={{
                 ".MuiOutlinedInput-input": { fontSize: "10px" },
               }}
@@ -148,7 +161,10 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({
     <MuiCard key={transaction.id} sx={{ m: "12px" }}>
       <CardContent>
         <Manifest transactionManifest={transaction.transactionManifest} />
-        <Receipt receipt={transaction.receipt} />
+        <Receipt
+          intentHash={transaction.intentHash}
+          receipt={transaction.receipt}
+        />
       </CardContent>
       <CardActions>
         <ButtonGroup fullWidth>

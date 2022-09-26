@@ -70,7 +70,7 @@ export type TransactionReceipt = {
   state_updates: StateUpdates;
 };
 
-type CommittedTransaction = {
+export type CommittedTransaction = {
   state_version: number;
   notarized_transaction: NotarizedTransaction;
   receipt: TransactionReceipt;
