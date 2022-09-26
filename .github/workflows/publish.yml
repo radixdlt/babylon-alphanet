@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: "18.x"
           registry-url: 'https://registry.npmjs.org'
-      - run : cat .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run : cat $NPM_CONFIG_USERCONFIG
       - name: Publish alphanet-walletextension-sdk
         run: |
           yarn
