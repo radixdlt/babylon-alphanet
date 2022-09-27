@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "buffer": "./buffer.js",
+    "loglevel": "./loglevel.js",
+    "neverthrow": "./neverthrow.js"
+  }
+}
