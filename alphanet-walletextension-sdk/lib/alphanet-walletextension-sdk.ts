@@ -23,4 +23,6 @@ const WalletSdk = () => {
   }
 }
 
+export { ManifestBuilder } from './manifest'
+
 export default WalletSdk
