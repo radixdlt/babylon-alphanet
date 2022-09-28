@@ -26,8 +26,8 @@ jobs:
       - name: Install dependencies
         run: yarn add ./radixdlt-transaction-library-v0.5.0.tgz
 
-      - name: Test
-        run: yarn test
+#      - name: Test
+#        run: yarn test
 
       - name: Build extension
         run: yarn build
@@ -57,7 +57,8 @@ jobs:
       - name: Zip the dist folder
         if: github.event_name == 'release'
         run: |
-           tar cvf alphanet-walletextension-${{ github.event.tag_name }}.zip dist/
+           TAG_NAME="${{ github.event.tag_name }}"
+           tar cvf alphanet-walletextension-$TAG_NAME.zip dist/
            ls -l
            pwd
 
