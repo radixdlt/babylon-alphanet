@@ -1,5 +1,6 @@
 .openapi-generator-ignore
 apis/StateApi.ts
+apis/StatusApi.ts
 apis/TransactionApi.ts
 apis/index.ts
 index.ts
@@ -62,6 +63,9 @@ models/TransactionStatus.ts
 models/UpSubstate.ts
 models/V0CommittedTransactionRequest.ts
 models/V0CommittedTransactionResponse.ts
+models/V0NetworkConfigurationResponse.ts
+models/V0NetworkConfigurationResponseVersion.ts
+models/V0NetworkConfigurationResponseWellKnownAddresses.ts
 models/V0StateComponentDescendentId.ts
 models/V0StateComponentRequest.ts
 models/V0StateComponentResponse.ts

@@ -8,16 +8,38 @@ info:
 servers:
   - url: 'https://alphanet.radixdlt.com/v0'
 tags:
+  - name: Status
+    x-displayName: Status
+    description: To query network configuration and status.
   - name: Transaction
     x-displayName: Transaction Endpoints
     description: To submit transactions to the network, or read information about them.
-  - name: Ledger State
+  - name: State
     x-displayName: Ledger State Endpoints
     description: To query the current ledger state.
 paths:
 ####################
 # v0 API Responses #
 ####################
+  "/status/network-configuration":
+    post:
+      summary: Get Network Configuration
+      description: Returns the network's configuration
+      tags:
+        - Status
+      responses:
+        '200':
+          description: Network Configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V0NetworkConfigurationResponse"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   "/transaction/submit":
     post:
       summary: Transaction Submit
@@ -1067,6 +1089,53 @@ components:
               $ref: '#/components/schemas/DataStruct'
 ############################################################################################################
 # V0
+##########################################
+# REQUEST: /status/network-configuration #
+##########################################
+    V0NetworkConfigurationResponse:
+      type: object
+      required:
+        - version
+        - network
+        - network_hrp_suffix
+        - well_known_addresses
+      properties:
+        version:
+          description: Different versions regarding the node, network and api.
+          type: object
+          required:
+            - core_version
+            - api_version
+          properties:
+            core_version:
+              type: string
+            api_version:
+              type: string
+        network:
+          $ref: "#/components/schemas/NetworkIdentifier"
+        network_hrp_suffix:
+          type: string
+          description: The network suffix used for Bech32m HRPs used for addressing.
+        well_known_addresses:
+          type: object
+          description: Key addresses for this network.
+          required:
+            - account_package
+            - faucet
+            - ecdsa_secp256k1
+            - eddsa_ed25519
+            - xrd
+          properties:
+            account_package:
+              type: string
+            faucet:
+              type: string
+            ecdsa_secp256k1:
+              type: string
+            eddsa_ed25519:
+              type: string
+            xrd:
+              type: string
 ###################################
 # REQUEST: /transaction/submit #
 ################################### 

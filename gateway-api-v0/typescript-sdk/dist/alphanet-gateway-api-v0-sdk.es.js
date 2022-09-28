@@ -1,28 +1,28 @@
-var kt = Object.defineProperty, xt = Object.defineProperties, Et = Object.getOwnPropertyDescriptors, D = Object.getOwnPropertySymbols, It = Object.prototype.hasOwnProperty, Dt = Object.prototype.propertyIsEnumerable, I = (t, e, n) => e in t ? kt(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, J = (t, e) => {
+var xt = Object.defineProperty, Et = Object.defineProperties, It = Object.getOwnPropertyDescriptors, C = Object.getOwnPropertySymbols, Vt = Object.prototype.hasOwnProperty, Ct = Object.prototype.propertyIsEnumerable, I = (t, e, n) => e in t ? xt(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, F = (t, e) => {
   for (var n in e || (e = {}))
-    It.call(e, n) && I(t, n, e[n]);
-  if (D)
-    for (var n of D(e))
-      Dt.call(e, n) && I(t, n, e[n]);
+    Vt.call(e, n) && I(t, n, e[n]);
+  if (C)
+    for (var n of C(e))
+      Ct.call(e, n) && I(t, n, e[n]);
   return t;
-}, Z = (t, e) => xt(t, Et(e)), R = (t, e, n) => (I(t, typeof e != "symbol" ? e + "" : e, n), n), l = (t, e, n) => new Promise((i, r) => {
-  var o = (s) => {
+}, tt = (t, e) => Et(t, It(e)), J = (t, e, n) => (I(t, typeof e != "symbol" ? e + "" : e, n), n), y = (t, e, n) => new Promise((i, r) => {
+  var o = (u) => {
     try {
-      a(n.next(s));
+      a(n.next(u));
     } catch (c) {
       r(c);
     }
-  }, u = (s) => {
+  }, s = (u) => {
     try {
-      a(n.throw(s));
+      a(n.throw(u));
     } catch (c) {
       r(c);
     }
-  }, a = (s) => s.done ? i(s.value) : Promise.resolve(s.value).then(o, u);
+  }, a = (u) => u.done ? i(u.value) : Promise.resolve(u.value).then(o, s);
   a((n = n.apply(t, e)).next());
 });
-const Vt = "https://alphanet.radixdlt.com/v0".replace(/\/+$/, "");
-class Ct {
+const Dt = "https://alphanet.radixdlt.com/v0".replace(/\/+$/, "");
+class qt {
   constructor(e = {}) {
     this.configuration = e;
   }
@@ -30,7 +30,7 @@ class Ct {
     this.configuration = e;
   }
   get basePath() {
-    return this.configuration.basePath != null ? this.configuration.basePath : Vt;
+    return this.configuration.basePath != null ? this.configuration.basePath : Dt;
   }
   get fetchApi() {
     return this.configuration.fetchApi;
@@ -39,7 +39,7 @@ class Ct {
     return this.configuration.middleware || [];
   }
   get queryParamsStringify() {
-    return this.configuration.queryParamsStringify || tt;
+    return this.configuration.queryParamsStringify || et;
   }
   get username() {
     return this.configuration.username;
@@ -55,7 +55,7 @@ class Ct {
   get accessToken() {
     const e = this.configuration.accessToken;
     if (e)
-      return typeof e == "function" ? e : () => l(this, null, function* () {
+      return typeof e == "function" ? e : () => y(this, null, function* () {
         return e;
       });
   }
@@ -66,32 +66,32 @@ class Ct {
     return this.configuration.credentials;
   }
 }
-const qt = new Ct();
-class j {
-  constructor(e = qt) {
-    this.configuration = e, R(this, "middleware"), R(this, "fetchApi", (n, i) => l(this, null, function* () {
+const At = new qt();
+class V {
+  constructor(e = At) {
+    this.configuration = e, J(this, "middleware"), J(this, "fetchApi", (n, i) => y(this, null, function* () {
       let r = { url: n, init: i };
-      for (const u of this.middleware)
-        u.pre && (r = (yield u.pre(J({
+      for (const s of this.middleware)
+        s.pre && (r = (yield s.pre(F({
           fetch: this.fetchApi
         }, r))) || r);
       let o;
       try {
         o = yield (this.configuration.fetchApi || fetch)(r.url, r.init);
-      } catch (u) {
+      } catch (s) {
         for (const a of this.middleware)
           a.onError && (o = (yield a.onError({
             fetch: this.fetchApi,
             url: r.url,
             init: r.init,
-            error: u,
+            error: s,
             response: o ? o.clone() : void 0
           })) || o);
         if (o !== void 0)
-          throw new Kt(u, "The request failed and the interceptors did not return an alternative response");
+          throw new Mt(s, "The request failed and the interceptors did not return an alternative response");
       }
-      for (const u of this.middleware)
-        u.post && (o = (yield u.post({
+      for (const s of this.middleware)
+        s.post && (o = (yield s.post({
           fetch: this.fetchApi,
           url: r.url,
           init: r.init,
@@ -113,33 +113,33 @@ class j {
     return this.withMiddleware(...n);
   }
   request(e, n) {
-    return l(this, null, function* () {
+    return y(this, null, function* () {
       const { url: i, init: r } = yield this.createFetchParams(e, n), o = yield this.fetchApi(i, r);
       if (o.status >= 200 && o.status < 300)
         return o;
-      throw new $t(o, "Response returned an error code");
+      throw new Kt(o, "Response returned an error code");
     });
   }
   createFetchParams(e, n) {
-    return l(this, null, function* () {
+    return y(this, null, function* () {
       let i = this.configuration.basePath + e.path;
       e.query !== void 0 && Object.keys(e.query).length !== 0 && (i += "?" + this.configuration.queryParamsStringify(e.query));
       const r = Object.assign({}, this.configuration.headers, e.headers);
       Object.keys(r).forEach((c) => r[c] === void 0 ? delete r[c] : {});
-      const o = typeof n == "function" ? n : () => l(this, null, function* () {
+      const o = typeof n == "function" ? n : () => y(this, null, function* () {
         return n;
-      }), u = {
+      }), s = {
         method: e.method,
         headers: r,
         body: e.body,
         credentials: this.configuration.credentials
-      }, a = J(J({}, u), yield o({
-        init: u,
+      }, a = F(F({}, s), yield o({
+        init: s,
         context: e
-      })), s = Z(J({}, a), {
-        body: vt(a.body) || a.body instanceof URLSearchParams || At(a.body) ? a.body : JSON.stringify(a.body)
+      })), u = tt(F({}, a), {
+        body: $t(a.body) || a.body instanceof URLSearchParams || vt(a.body) ? a.body : JSON.stringify(a.body)
       });
-      return { url: i, init: s };
+      return { url: i, init: u };
     });
   }
   clone() {
@@ -147,28 +147,28 @@ class j {
     return n.middleware = this.middleware.slice(), n;
   }
 }
-function At(t) {
+function vt(t) {
   return typeof Blob < "u" && t instanceof Blob;
 }
-function vt(t) {
+function $t(t) {
   return typeof FormData < "u" && t instanceof FormData;
-}
-class $t extends Error {
-  constructor(e, n) {
-    super(n), this.response = e, R(this, "name", "ResponseError");
-  }
 }
 class Kt extends Error {
   constructor(e, n) {
-    super(n), this.cause = e, R(this, "name", "FetchError");
+    super(n), this.response = e, J(this, "name", "ResponseError");
+  }
+}
+class Mt extends Error {
+  constructor(e, n) {
+    super(n), this.cause = e, J(this, "name", "FetchError");
   }
 }
 class h extends Error {
   constructor(e, n) {
-    super(n), this.field = e, R(this, "name", "RequiredError");
+    super(n), this.field = e, J(this, "name", "RequiredError");
   }
 }
-const kr = {
+const vr = {
   csv: ",",
   ssv: " ",
   tsv: "	",
@@ -178,10 +178,10 @@ function _(t, e) {
   const n = t[e];
   return n != null;
 }
-function tt(t, e = "") {
-  return Object.keys(t).map((n) => et(n, t[n], e)).filter((n) => n.length > 0).join("&");
+function et(t, e = "") {
+  return Object.keys(t).map((n) => nt(n, t[n], e)).filter((n) => n.length > 0).join("&");
 }
-function et(t, e, n = "") {
+function nt(t, e, n = "") {
   const i = n + (n.length ? `[${t}]` : t);
   if (e instanceof Array) {
     const r = e.map((o) => encodeURIComponent(String(o))).join(`&${encodeURIComponent(i)}=`);
@@ -189,346 +189,346 @@ function et(t, e, n = "") {
   }
   if (e instanceof Set) {
     const r = Array.from(e);
-    return et(t, r, n);
+    return nt(t, r, n);
   }
-  return e instanceof Date ? `${encodeURIComponent(i)}=${encodeURIComponent(e.toISOString())}` : e instanceof Object ? tt(e, i) : `${encodeURIComponent(i)}=${encodeURIComponent(String(e))}`;
+  return e instanceof Date ? `${encodeURIComponent(i)}=${encodeURIComponent(e.toISOString())}` : e instanceof Object ? et(e, i) : `${encodeURIComponent(i)}=${encodeURIComponent(String(e))}`;
 }
-function xr(t, e) {
+function $r(t, e) {
   return Object.keys(t).reduce(
-    (n, i) => Z(J({}, n), { [i]: e(t[i]) }),
+    (n, i) => tt(F({}, n), { [i]: e(t[i]) }),
     {}
   );
 }
-function Er(t) {
+function Kr(t) {
   for (const e of t)
     if (e.contentType === "multipart/form-data")
       return !0;
   return !1;
 }
-class S {
+class l {
   constructor(e, n = (i) => i) {
     this.raw = e, this.transformer = n;
   }
   value() {
-    return l(this, null, function* () {
+    return y(this, null, function* () {
       return this.transformer(yield this.raw.json());
     });
   }
 }
-class Ir {
+class Mr {
   constructor(e) {
     this.raw = e;
   }
   value() {
-    return l(this, null, function* () {
+    return y(this, null, function* () {
     });
   }
 }
-class Dr {
+class Ur {
   constructor(e) {
     this.raw = e;
   }
   value() {
-    return l(this, null, function* () {
+    return y(this, null, function* () {
       return yield this.raw.blob();
     });
   }
 }
-class Vr {
+class Wr {
   constructor(e) {
     this.raw = e;
   }
   value() {
-    return l(this, null, function* () {
+    return y(this, null, function* () {
       return yield this.raw.text();
     });
   }
 }
-function Cr(t) {
+function zr(t) {
   let e = !0;
   return e = e && "state_version" in t, e;
 }
-function qr(t) {
-  return Mt(t);
+function Br(t) {
+  return Ut(t);
 }
-function Mt(t, e) {
+function Ut(t, e) {
   return t == null ? t : {
     state_version: t.state_version
   };
 }
-function Ar(t) {
+function Hr(t) {
   if (t !== void 0)
     return t === null ? null : {
       state_version: t.state_version
     };
 }
-const vr = {
+const Gr = {
   EcdsaSecp256k1: "EcdsaSecp256k1",
   EddsaEd25519: "EddsaEd25519"
 };
-function F(t) {
-  return Ut(t);
+function w(t) {
+  return Wt(t);
 }
-function Ut(t, e) {
+function Wt(t, e) {
   return t;
 }
-function $r(t) {
+function Lr(t) {
   return t;
 }
-function Kr(t) {
+function Qr(t) {
   let e = !0;
   return e = e && "key_type" in t, e = e && "signature_hex" in t, e;
 }
 function zt(t) {
-  return nt(t);
+  return rt(t);
 }
-function nt(t, e) {
+function rt(t, e) {
   return t == null ? t : {
-    key_type: F(t.key_type),
+    key_type: w(t.key_type),
     signature_hex: t.signature_hex
   };
 }
-function rt(t) {
+function it(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_type: t.key_type,
       signature_hex: t.signature_hex
     };
 }
-function Mr(t) {
+function Xr(t) {
   let e = !0;
   return e = e && "key_type" in t, e = e && "signature_hex" in t, e;
 }
 function Bt(t) {
-  return it(t);
+  return ot(t);
 }
-function it(t, e) {
+function ot(t, e) {
   return t == null ? t : {
-    key_type: F(t.key_type),
+    key_type: w(t.key_type),
     signature_hex: t.signature_hex
   };
 }
-function ot(t) {
+function st(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_type: t.key_type,
       signature_hex: t.signature_hex
     };
 }
-var Wt = Object.defineProperty, Ht = Object.defineProperties, Gt = Object.getOwnPropertyDescriptors, V = Object.getOwnPropertySymbols, Lt = Object.prototype.hasOwnProperty, Qt = Object.prototype.propertyIsEnumerable, C = (t, e, n) => e in t ? Wt(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, q = (t, e) => {
+var Ht = Object.defineProperty, Gt = Object.defineProperties, Lt = Object.getOwnPropertyDescriptors, D = Object.getOwnPropertySymbols, Qt = Object.prototype.hasOwnProperty, Xt = Object.prototype.propertyIsEnumerable, q = (t, e, n) => e in t ? Ht(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, A = (t, e) => {
   for (var n in e || (e = {}))
-    Lt.call(e, n) && C(t, n, e[n]);
-  if (V)
-    for (var n of V(e))
-      Qt.call(e, n) && C(t, n, e[n]);
+    Qt.call(e, n) && q(t, n, e[n]);
+  if (D)
+    for (var n of D(e))
+      Xt.call(e, n) && q(t, n, e[n]);
   return t;
-}, A = (t, e) => Ht(t, Gt(e));
-function Xt(t) {
-  return Yt(t);
+}, v = (t, e) => Gt(t, Lt(e));
+function Yt(t) {
+  return Zt(t);
 }
-function Yt(t, e) {
+function Zt(t, e) {
   if (t == null)
     return t;
   switch (t.key_type) {
     case "EcdsaSecp256k1":
-      return A(q({}, nt(t)), { key_type: "EcdsaSecp256k1" });
+      return v(A({}, rt(t)), { key_type: "EcdsaSecp256k1" });
     case "EddsaEd25519":
-      return A(q({}, it(t)), { key_type: "EddsaEd25519" });
+      return v(A({}, ot(t)), { key_type: "EddsaEd25519" });
     default:
       throw new Error(`No variant of Signature exists with 'key_type=${t.key_type}'`);
   }
 }
-function Zt(t) {
+function jt(t) {
   if (t !== void 0) {
     if (t === null)
       return null;
     switch (t.key_type) {
       case "EcdsaSecp256k1":
-        return rt(t);
+        return it(t);
       case "EddsaEd25519":
-        return ot(t);
+        return st(t);
       default:
         throw new Error(`No variant of Signature exists with 'key_type=${t.key_type}'`);
     }
   }
 }
-function Ur(t) {
+function Yr(t) {
   let e = !0;
   return e = e && "key_type" in t, e = e && "recoverable_signature" in t, e;
 }
-function zr(t) {
+function Zr(t) {
   return ut(t);
 }
 function ut(t, e) {
   return t == null ? t : {
-    key_type: F(t.key_type),
+    key_type: w(t.key_type),
     recoverable_signature: zt(t.recoverable_signature)
   };
 }
-function jt(t) {
+function te(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_type: t.key_type,
-      recoverable_signature: rt(t.recoverable_signature)
+      recoverable_signature: it(t.recoverable_signature)
     };
 }
-function Br(t) {
+function jr(t) {
   let e = !0;
   return e = e && "key_type" in t, e = e && "key_hex" in t, e;
 }
-function te(t) {
-  return st(t);
+function ee(t) {
+  return at(t);
 }
-function st(t, e) {
+function at(t, e) {
   return t == null ? t : {
-    key_type: F(t.key_type),
+    key_type: w(t.key_type),
     key_hex: t.key_hex
   };
 }
-function at(t) {
+function ct(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_type: t.key_type,
       key_hex: t.key_hex
     };
 }
-function Wr(t) {
+function ti(t) {
   let e = !0;
   return e = e && "key_type" in t, e = e && "public_key" in t, e = e && "signature" in t, e;
 }
-function Hr(t) {
-  return ct(t);
+function ei(t) {
+  return dt(t);
 }
-function ct(t, e) {
+function dt(t, e) {
   return t == null ? t : {
-    key_type: F(t.key_type),
-    public_key: te(t.public_key),
+    key_type: w(t.key_type),
+    public_key: ee(t.public_key),
     signature: Bt(t.signature)
   };
 }
-function ee(t) {
+function ne(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_type: t.key_type,
-      public_key: at(t.public_key),
-      signature: ot(t.signature)
+      public_key: ct(t.public_key),
+      signature: st(t.signature)
     };
 }
-var ne = Object.defineProperty, re = Object.defineProperties, ie = Object.getOwnPropertyDescriptors, v = Object.getOwnPropertySymbols, oe = Object.prototype.hasOwnProperty, ue = Object.prototype.propertyIsEnumerable, $ = (t, e, n) => e in t ? ne(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, K = (t, e) => {
+var re = Object.defineProperty, ie = Object.defineProperties, oe = Object.getOwnPropertyDescriptors, $ = Object.getOwnPropertySymbols, se = Object.prototype.hasOwnProperty, ue = Object.prototype.propertyIsEnumerable, K = (t, e, n) => e in t ? re(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, M = (t, e) => {
   for (var n in e || (e = {}))
-    oe.call(e, n) && $(t, n, e[n]);
-  if (v)
-    for (var n of v(e))
-      ue.call(e, n) && $(t, n, e[n]);
+    se.call(e, n) && K(t, n, e[n]);
+  if ($)
+    for (var n of $(e))
+      ue.call(e, n) && K(t, n, e[n]);
   return t;
-}, M = (t, e) => re(t, ie(e));
-function se(t) {
-  return ae(t);
+}, U = (t, e) => ie(t, oe(e));
+function ae(t) {
+  return ce(t);
 }
-function ae(t, e) {
+function ce(t, e) {
   if (t == null)
     return t;
   switch (t.key_type) {
     case "EcdsaSecp256k1":
-      return M(K({}, ut(t)), { key_type: "EcdsaSecp256k1" });
+      return U(M({}, ut(t)), { key_type: "EcdsaSecp256k1" });
     case "EddsaEd25519":
-      return M(K({}, ct(t)), { key_type: "EddsaEd25519" });
+      return U(M({}, dt(t)), { key_type: "EddsaEd25519" });
     default:
       throw new Error(`No variant of SignatureWithPublicKey exists with 'key_type=${t.key_type}'`);
   }
 }
-function ce(t) {
+function de(t) {
   if (t !== void 0) {
     if (t === null)
       return null;
     switch (t.key_type) {
       case "EcdsaSecp256k1":
-        return jt(t);
+        return te(t);
       case "EddsaEd25519":
-        return ee(t);
+        return ne(t);
       default:
         throw new Error(`No variant of SignatureWithPublicKey exists with 'key_type=${t.key_type}'`);
     }
   }
 }
-function Gr(t) {
+function ni(t) {
   let e = !0;
   return e = e && "key_type" in t, e = e && "key_hex" in t, e;
 }
-function Lr(t) {
-  return dt(t);
+function ri(t) {
+  return _t(t);
 }
-function dt(t, e) {
+function _t(t, e) {
   return t == null ? t : {
-    key_type: F(t.key_type),
+    key_type: w(t.key_type),
     key_hex: t.key_hex
   };
 }
-function de(t) {
+function _e(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_type: t.key_type,
       key_hex: t.key_hex
     };
 }
-var _e = Object.defineProperty, fe = Object.defineProperties, pe = Object.getOwnPropertyDescriptors, U = Object.getOwnPropertySymbols, le = Object.prototype.hasOwnProperty, ye = Object.prototype.propertyIsEnumerable, z = (t, e, n) => e in t ? _e(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, B = (t, e) => {
+var fe = Object.defineProperty, pe = Object.defineProperties, le = Object.getOwnPropertyDescriptors, W = Object.getOwnPropertySymbols, ye = Object.prototype.hasOwnProperty, me = Object.prototype.propertyIsEnumerable, z = (t, e, n) => e in t ? fe(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, B = (t, e) => {
   for (var n in e || (e = {}))
-    le.call(e, n) && z(t, n, e[n]);
-  if (U)
-    for (var n of U(e))
-      ye.call(e, n) && z(t, n, e[n]);
+    ye.call(e, n) && z(t, n, e[n]);
+  if (W)
+    for (var n of W(e))
+      me.call(e, n) && z(t, n, e[n]);
   return t;
-}, W = (t, e) => fe(t, pe(e));
-function me(t) {
-  return Se(t);
+}, H = (t, e) => pe(t, le(e));
+function Se(t) {
+  return he(t);
 }
-function Se(t, e) {
+function he(t, e) {
   if (t == null)
     return t;
   switch (t.key_type) {
     case "EcdsaSecp256k1":
-      return W(B({}, dt(t)), { key_type: "EcdsaSecp256k1" });
+      return H(B({}, _t(t)), { key_type: "EcdsaSecp256k1" });
     case "EddsaEd25519":
-      return W(B({}, st(t)), { key_type: "EddsaEd25519" });
+      return H(B({}, at(t)), { key_type: "EddsaEd25519" });
     default:
       throw new Error(`No variant of PublicKey exists with 'key_type=${t.key_type}'`);
   }
 }
-function he(t) {
+function be(t) {
   if (t !== void 0) {
     if (t === null)
       return null;
     switch (t.key_type) {
       case "EcdsaSecp256k1":
-        return de(t);
+        return _e(t);
       case "EddsaEd25519":
-        return at(t);
+        return ct(t);
       default:
         throw new Error(`No variant of PublicKey exists with 'key_type=${t.key_type}'`);
     }
   }
 }
-function Qr(t) {
+function ii(t) {
   let e = !0;
   return e = e && "version" in t, e = e && "network_id" in t, e = e && "start_epoch_inclusive" in t, e = e && "end_epoch_exclusive" in t, e = e && "nonce" in t, e = e && "notary_public_key" in t, e = e && "notary_as_signatory" in t, e = e && "cost_unit_limit" in t, e = e && "tip_percentage" in t, e;
 }
-function be(t) {
-  return ge(t);
+function ge(t) {
+  return Oe(t);
 }
-function ge(t, e) {
+function Oe(t, e) {
   return t == null ? t : {
     version: t.version,
     network_id: t.network_id,
     start_epoch_inclusive: t.start_epoch_inclusive,
     end_epoch_exclusive: t.end_epoch_exclusive,
     nonce: t.nonce,
-    notary_public_key: me(t.notary_public_key),
+    notary_public_key: Se(t.notary_public_key),
     notary_as_signatory: t.notary_as_signatory,
     cost_unit_limit: t.cost_unit_limit,
     tip_percentage: t.tip_percentage
   };
 }
-function Oe(t) {
+function Ne(t) {
   if (t !== void 0)
     return t === null ? null : {
       version: t.version,
@@ -536,23 +536,23 @@ function Oe(t) {
       start_epoch_inclusive: t.start_epoch_inclusive,
       end_epoch_exclusive: t.end_epoch_exclusive,
       nonce: t.nonce,
-      notary_public_key: he(t.notary_public_key),
+      notary_public_key: be(t.notary_public_key),
       notary_as_signatory: t.notary_as_signatory,
       cost_unit_limit: t.cost_unit_limit,
       tip_percentage: t.tip_percentage
     };
 }
-function Xr(t) {
+function oi(t) {
   let e = !0;
   return e = e && "hash" in t, e = e && "header" in t, e = e && "manifest" in t, e = e && "blobs_hex" in t, e;
 }
-function Ne(t) {
-  return Te(t);
+function Te(t) {
+  return we(t);
 }
-function Te(t, e) {
+function we(t, e) {
   return t == null ? t : {
     hash: t.hash,
-    header: be(t.header),
+    header: ge(t.header),
     manifest: t.manifest,
     blobs_hex: t.blobs_hex
   };
@@ -561,12 +561,12 @@ function Fe(t) {
   if (t !== void 0)
     return t === null ? null : {
       hash: t.hash,
-      header: Oe(t.header),
+      header: Ne(t.header),
       manifest: t.manifest,
       blobs_hex: t.blobs_hex
     };
 }
-function Yr(t) {
+function si(t) {
   let e = !0;
   return e = e && "hash" in t, e = e && "intent" in t, e = e && "intent_signatures" in t, e;
 }
@@ -576,50 +576,50 @@ function Je(t) {
 function Re(t, e) {
   return t == null ? t : {
     hash: t.hash,
-    intent: Ne(t.intent),
-    intent_signatures: t.intent_signatures.map(se)
+    intent: Te(t.intent),
+    intent_signatures: t.intent_signatures.map(ae)
   };
 }
-function we(t) {
+function Pe(t) {
   if (t !== void 0)
     return t === null ? null : {
       hash: t.hash,
       intent: Fe(t.intent),
-      intent_signatures: t.intent_signatures.map(ce)
+      intent_signatures: t.intent_signatures.map(de)
     };
 }
-function Zr(t) {
+function ui(t) {
   let e = !0;
   return e = e && "hash" in t, e = e && "payload_hex" in t, e = e && "signed_intent" in t, e = e && "notary_signature" in t, e;
 }
-function Pe(t) {
-  return ke(t);
+function ke(t) {
+  return xe(t);
 }
-function ke(t, e) {
+function xe(t, e) {
   return t == null ? t : {
     hash: t.hash,
     payload_hex: t.payload_hex,
     signed_intent: Je(t.signed_intent),
-    notary_signature: Xt(t.notary_signature)
+    notary_signature: Yt(t.notary_signature)
   };
 }
-function xe(t) {
+function Ee(t) {
   if (t !== void 0)
     return t === null ? null : {
       hash: t.hash,
       payload_hex: t.payload_hex,
-      signed_intent: we(t.signed_intent),
-      notary_signature: Zt(t.notary_signature)
+      signed_intent: Pe(t.signed_intent),
+      notary_signature: jt(t.notary_signature)
     };
 }
-function jr(t) {
+function ai(t) {
   let e = !0;
   return e = e && "loan_fully_repaid" in t, e = e && "cost_unit_limit" in t, e = e && "cost_unit_consumed" in t, e = e && "cost_unit_price_attos" in t, e = e && "tip_percentage" in t, e = e && "xrd_burned_attos" in t, e = e && "xrd_tipped_attos" in t, e;
 }
-function Ee(t) {
-  return Ie(t);
+function Ie(t) {
+  return Ve(t);
 }
-function Ie(t, e) {
+function Ve(t, e) {
   return t == null ? t : {
     loan_fully_repaid: t.loan_fully_repaid,
     cost_unit_limit: t.cost_unit_limit,
@@ -630,7 +630,7 @@ function Ie(t, e) {
     xrd_tipped_attos: t.xrd_tipped_attos
   };
 }
-function De(t) {
+function Ce(t) {
   if (t !== void 0)
     return t === null ? null : {
       loan_fully_repaid: t.loan_fully_repaid,
@@ -642,27 +642,27 @@ function De(t) {
       xrd_tipped_attos: t.xrd_tipped_attos
     };
 }
-function ti(t) {
+function ci(t) {
   let e = !0;
   return e = e && "data_hex" in t, e = e && "data_json" in t, e;
 }
-function _t(t) {
-  return Ve(t);
+function ft(t) {
+  return De(t);
 }
-function Ve(t, e) {
+function De(t, e) {
   return t == null ? t : {
     data_hex: t.data_hex,
     data_json: t.data_json
   };
 }
-function ft(t) {
+function pt(t) {
   if (t !== void 0)
     return t === null ? null : {
       data_hex: t.data_hex,
       data_json: t.data_json
     };
 }
-const ei = {
+const di = {
   System: "System",
   ResourceManager: "ResourceManager",
   Component: "Component",
@@ -671,15 +671,15 @@ const ei = {
   KeyValueStore: "KeyValueStore"
 };
 function d(t) {
-  return Ce(t);
+  return qe(t);
 }
-function Ce(t, e) {
+function qe(t, e) {
   return t;
 }
-function ni(t) {
+function _i(t) {
   return t;
 }
-const ri = {
+const fi = {
   System: "System",
   ResourceManager: "ResourceManager",
   ComponentInfo: "ComponentInfo",
@@ -690,22 +690,22 @@ const ri = {
   KeyValueStoreEntry: "KeyValueStoreEntry"
 };
 function p(t) {
-  return qe(t);
+  return Ae(t);
 }
-function qe(t, e) {
+function Ae(t, e) {
   return t;
 }
-function ii(t) {
+function pi(t) {
   return t;
 }
-function oi(t) {
+function li(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "entity_address_hex" in t, e = e && "substate_type" in t, e = e && "substate_key_hex" in t, e;
 }
 function x(t) {
-  return Ae(t);
+  return ve(t);
 }
-function Ae(t, e) {
+function ve(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     entity_address_hex: t.entity_address_hex,
@@ -722,21 +722,21 @@ function E(t) {
       substate_key_hex: t.substate_key_hex
     };
 }
-function ui(t) {
+function yi(t) {
   let e = !0;
   return e = e && "substate_id" in t, e = e && "substate_data_hash" in t, e = e && "version" in t, e;
 }
-function ve(t) {
-  return $e(t);
+function $e(t) {
+  return Ke(t);
 }
-function $e(t, e) {
+function Ke(t, e) {
   return t == null ? t : {
     substate_id: x(t.substate_id),
     substate_data_hash: t.substate_data_hash,
     version: t.version
   };
 }
-function Ke(t) {
+function Me(t) {
   if (t !== void 0)
     return t === null ? null : {
       substate_id: E(t.substate_id),
@@ -744,14 +744,14 @@ function Ke(t) {
       version: t.version
     };
 }
-function si(t) {
+function mi(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "entity_address_hex" in t, e = e && "global_address_hex" in t, e = e && "global_address" in t, e;
 }
-function Me(t) {
-  return Ue(t);
+function Ue(t) {
+  return We(t);
 }
-function Ue(t, e) {
+function We(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     entity_address_hex: t.entity_address_hex,
@@ -768,14 +768,14 @@ function ze(t) {
       global_address: t.global_address
     };
 }
-function ai(t) {
+function Si(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "package_address" in t, e = e && "blueprint_name" in t, e;
 }
-function ci(t) {
-  return pt(t);
+function hi(t) {
+  return lt(t);
 }
-function pt(t, e) {
+function lt(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     substate_type: p(t.substate_type),
@@ -792,14 +792,14 @@ function Be(t) {
       blueprint_name: t.blueprint_name
     };
 }
-function di(t) {
+function bi(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "entity_address_hex" in t, e;
 }
 function P(t) {
-  return We(t);
+  return He(t);
 }
-function We(t, e) {
+function He(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     entity_address_hex: t.entity_address_hex
@@ -812,16 +812,16 @@ function k(t) {
       entity_address_hex: t.entity_address_hex
     };
 }
-function _i(t) {
+function gi(t) {
   let e = !0;
   return e = e && "struct_data" in t, e = e && "owned_entities" in t, e = e && "referenced_entities" in t, e;
 }
 function N(t) {
-  return He(t);
+  return Ge(t);
 }
-function He(t, e) {
+function Ge(t, e) {
   return t == null ? t : {
-    struct_data: _t(t.struct_data),
+    struct_data: ft(t.struct_data),
     owned_entities: t.owned_entities.map(P),
     referenced_entities: t.referenced_entities.map(P)
   };
@@ -829,26 +829,26 @@ function He(t, e) {
 function T(t) {
   if (t !== void 0)
     return t === null ? null : {
-      struct_data: ft(t.struct_data),
+      struct_data: pt(t.struct_data),
       owned_entities: t.owned_entities.map(k),
       referenced_entities: t.referenced_entities.map(k)
     };
 }
-function fi(t) {
+function Oi(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "data_struct" in t, e;
 }
-function pi(t) {
-  return lt(t);
+function Ni(t) {
+  return yt(t);
 }
-function lt(t, e) {
+function yt(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     substate_type: p(t.substate_type),
     data_struct: N(t.data_struct)
   };
 }
-function Ge(t) {
+function Le(t) {
   if (t !== void 0)
     return t === null ? null : {
       entity_type: t.entity_type,
@@ -856,14 +856,14 @@ function Ge(t) {
       data_struct: T(t.data_struct)
     };
 }
-function li(t) {
+function Ti(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "key_hex" in t, e = e && "is_deleted" in t, e;
 }
-function yi(t) {
-  return yt(t);
+function wi(t) {
+  return mt(t);
 }
-function yt(t, e) {
+function mt(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     substate_type: p(t.substate_type),
@@ -872,7 +872,7 @@ function yt(t, e) {
     data_struct: _(t, "data_struct") ? N(t.data_struct) : void 0
   };
 }
-function Le(t) {
+function Qe(t) {
   if (t !== void 0)
     return t === null ? null : {
       entity_type: t.entity_type,
@@ -882,64 +882,40 @@ function Le(t) {
       data_struct: T(t.data_struct)
     };
 }
-function mi(t) {
+function Fi(t) {
   let e = !0;
   return e = e && "immutable_data" in t, e = e && "mutable_data" in t, e;
 }
-function mt(t) {
-  return Qe(t);
+function St(t) {
+  return Xe(t);
 }
-function Qe(t, e) {
+function Xe(t, e) {
   return t == null ? t : {
     immutable_data: N(t.immutable_data),
     mutable_data: N(t.mutable_data)
   };
 }
-function St(t) {
+function ht(t) {
   if (t !== void 0)
     return t === null ? null : {
       immutable_data: T(t.immutable_data),
       mutable_data: T(t.mutable_data)
     };
 }
-function Si(t) {
+function Ji(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "nf_id_hex" in t, e = e && "is_deleted" in t, e;
 }
-function hi(t) {
-  return ht(t);
-}
-function ht(t, e) {
-  return t == null ? t : {
-    entity_type: d(t.entity_type),
-    substate_type: p(t.substate_type),
-    nf_id_hex: t.nf_id_hex,
-    is_deleted: t.is_deleted,
-    non_fungible_data: _(t, "non_fungible_data") ? mt(t.non_fungible_data) : void 0
-  };
-}
-function Xe(t) {
-  if (t !== void 0)
-    return t === null ? null : {
-      entity_type: t.entity_type,
-      substate_type: t.substate_type,
-      nf_id_hex: t.nf_id_hex,
-      is_deleted: t.is_deleted,
-      non_fungible_data: St(t.non_fungible_data)
-    };
-}
-function bi(t) {
-  let e = !0;
-  return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "code_hex" in t, e;
-}
-function gi(t) {
+function Ri(t) {
   return bt(t);
 }
 function bt(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     substate_type: p(t.substate_type),
-    code_hex: t.code_hex
+    nf_id_hex: t.nf_id_hex,
+    is_deleted: t.is_deleted,
+    non_fungible_data: _(t, "non_fungible_data") ? St(t.non_fungible_data) : void 0
   };
 }
 function Ye(t) {
@@ -947,82 +923,81 @@ function Ye(t) {
     return t === null ? null : {
       entity_type: t.entity_type,
       substate_type: t.substate_type,
+      nf_id_hex: t.nf_id_hex,
+      is_deleted: t.is_deleted,
+      non_fungible_data: ht(t.non_fungible_data)
+    };
+}
+function Pi(t) {
+  let e = !0;
+  return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "code_hex" in t, e;
+}
+function ki(t) {
+  return gt(t);
+}
+function gt(t, e) {
+  return t == null ? t : {
+    entity_type: d(t.entity_type),
+    substate_type: p(t.substate_type),
+    code_hex: t.code_hex
+  };
+}
+function Ze(t) {
+  if (t !== void 0)
+    return t === null ? null : {
+      entity_type: t.entity_type,
+      substate_type: t.substate_type,
       code_hex: t.code_hex
     };
 }
-function Oi(t) {
+function xi(t) {
   let e = !0;
   return e = e && "key" in t, e = e && "value" in t, e;
 }
-function gt(t) {
-  return Ze(t);
+function Ot(t) {
+  return je(t);
 }
-function Ze(t, e) {
+function je(t, e) {
   return t == null ? t : {
     key: t.key,
     value: t.value
   };
 }
-function Ot(t) {
+function Nt(t) {
   if (t !== void 0)
     return t === null ? null : {
       key: t.key,
       value: t.value
     };
 }
-const Ni = {
+const Ei = {
   Fungible: "Fungible",
   NonFungible: "NonFungible"
 };
-function w(t) {
-  return je(t);
+function R(t) {
+  return tn(t);
 }
-function je(t, e) {
+function tn(t, e) {
   return t;
 }
-function Ti(t) {
+function Ii(t) {
   return t;
 }
-function Fi(t) {
+function Vi(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "resource_type" in t, e = e && "metadata" in t, e = e && "total_supply_attos" in t, e;
 }
-function Ji(t) {
-  return Nt(t);
-}
-function Nt(t, e) {
-  return t == null ? t : {
-    entity_type: d(t.entity_type),
-    substate_type: p(t.substate_type),
-    resource_type: w(t.resource_type),
-    fungible_divisibility: _(t, "fungible_divisibility") ? t.fungible_divisibility : void 0,
-    metadata: t.metadata.map(gt),
-    total_supply_attos: t.total_supply_attos
-  };
-}
-function tn(t) {
-  if (t !== void 0)
-    return t === null ? null : {
-      entity_type: t.entity_type,
-      substate_type: t.substate_type,
-      resource_type: t.resource_type,
-      fungible_divisibility: t.fungible_divisibility,
-      metadata: t.metadata.map(Ot),
-      total_supply_attos: t.total_supply_attos
-    };
-}
-function Ri(t) {
-  let e = !0;
-  return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "epoch" in t, e;
-}
-function wi(t) {
+function Ci(t) {
   return Tt(t);
 }
 function Tt(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     substate_type: p(t.substate_type),
-    epoch: t.epoch
+    resource_type: R(t.resource_type),
+    fungible_divisibility: _(t, "fungible_divisibility") ? t.fungible_divisibility : void 0,
+    metadata: t.metadata.map(Ot),
+    total_supply_attos: t.total_supply_attos
   };
 }
 function en(t) {
@@ -1030,43 +1005,46 @@ function en(t) {
     return t === null ? null : {
       entity_type: t.entity_type,
       substate_type: t.substate_type,
-      epoch: t.epoch
+      resource_type: t.resource_type,
+      fungible_divisibility: t.fungible_divisibility,
+      metadata: t.metadata.map(Nt),
+      total_supply_attos: t.total_supply_attos
     };
 }
-function Pi(t) {
+function Di(t) {
   let e = !0;
-  return e = e && "resource_type" in t, e = e && "resource_address" in t, e = e && "amount_attos" in t, e;
+  return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "epoch" in t, e;
 }
-function ki(t) {
-  return Ft(t);
+function qi(t) {
+  return wt(t);
 }
-function Ft(t, e) {
+function wt(t, e) {
   return t == null ? t : {
-    resource_type: w(t.resource_type),
-    resource_address: t.resource_address,
-    amount_attos: t.amount_attos
+    entity_type: d(t.entity_type),
+    substate_type: p(t.substate_type),
+    epoch: t.epoch
   };
 }
 function nn(t) {
   if (t !== void 0)
     return t === null ? null : {
-      resource_type: t.resource_type,
-      resource_address: t.resource_address,
-      amount_attos: t.amount_attos
+      entity_type: t.entity_type,
+      substate_type: t.substate_type,
+      epoch: t.epoch
     };
 }
-function xi(t) {
+function Ai(t) {
   let e = !0;
-  return e = e && "resource_type" in t, e = e && "resource_address" in t, e = e && "nf_ids_hex" in t, e;
+  return e = e && "resource_type" in t, e = e && "resource_address" in t, e = e && "amount_attos" in t, e;
 }
-function Ei(t) {
-  return Jt(t);
+function vi(t) {
+  return Ft(t);
 }
-function Jt(t, e) {
+function Ft(t, e) {
   return t == null ? t : {
-    resource_type: w(t.resource_type),
+    resource_type: R(t.resource_type),
     resource_address: t.resource_address,
-    nf_ids_hex: t.nf_ids_hex
+    amount_attos: t.amount_attos
   };
 }
 function rn(t) {
@@ -1074,99 +1052,121 @@ function rn(t) {
     return t === null ? null : {
       resource_type: t.resource_type,
       resource_address: t.resource_address,
+      amount_attos: t.amount_attos
+    };
+}
+function $i(t) {
+  let e = !0;
+  return e = e && "resource_type" in t, e = e && "resource_address" in t, e = e && "nf_ids_hex" in t, e;
+}
+function Ki(t) {
+  return Jt(t);
+}
+function Jt(t, e) {
+  return t == null ? t : {
+    resource_type: R(t.resource_type),
+    resource_address: t.resource_address,
+    nf_ids_hex: t.nf_ids_hex
+  };
+}
+function on(t) {
+  if (t !== void 0)
+    return t === null ? null : {
+      resource_type: t.resource_type,
+      resource_address: t.resource_address,
       nf_ids_hex: t.nf_ids_hex
     };
 }
-var on = Object.defineProperty, un = Object.defineProperties, sn = Object.getOwnPropertyDescriptors, H = Object.getOwnPropertySymbols, an = Object.prototype.hasOwnProperty, cn = Object.prototype.propertyIsEnumerable, G = (t, e, n) => e in t ? on(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, L = (t, e) => {
+var sn = Object.defineProperty, un = Object.defineProperties, an = Object.getOwnPropertyDescriptors, G = Object.getOwnPropertySymbols, cn = Object.prototype.hasOwnProperty, dn = Object.prototype.propertyIsEnumerable, L = (t, e, n) => e in t ? sn(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, Q = (t, e) => {
   for (var n in e || (e = {}))
-    an.call(e, n) && G(t, n, e[n]);
-  if (H)
-    for (var n of H(e))
-      cn.call(e, n) && G(t, n, e[n]);
+    cn.call(e, n) && L(t, n, e[n]);
+  if (G)
+    for (var n of G(e))
+      dn.call(e, n) && L(t, n, e[n]);
   return t;
-}, Q = (t, e) => un(t, sn(e));
+}, X = (t, e) => un(t, an(e));
 function Rt(t) {
-  return dn(t);
+  return _n(t);
 }
-function dn(t, e) {
+function _n(t, e) {
   if (t == null)
     return t;
   switch (t.resource_type) {
     case "Fungible":
-      return Q(L({}, Ft(t)), { resource_type: "Fungible" });
+      return X(Q({}, Ft(t)), { resource_type: "Fungible" });
     case "NonFungible":
-      return Q(L({}, Jt(t)), { resource_type: "NonFungible" });
+      return X(Q({}, Jt(t)), { resource_type: "NonFungible" });
     default:
       throw new Error(`No variant of ResourceAmount exists with 'resource_type=${t.resource_type}'`);
   }
 }
-function wt(t) {
+function Pt(t) {
   if (t !== void 0) {
     if (t === null)
       return null;
     switch (t.resource_type) {
       case "Fungible":
-        return nn(t);
-      case "NonFungible":
         return rn(t);
+      case "NonFungible":
+        return on(t);
       default:
         throw new Error(`No variant of ResourceAmount exists with 'resource_type=${t.resource_type}'`);
     }
   }
 }
-function Ii(t) {
+function Mi(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e = e && "resource_amount" in t, e;
 }
-function Di(t) {
-  return Pt(t);
+function Ui(t) {
+  return kt(t);
 }
-function Pt(t, e) {
+function kt(t, e) {
   return t == null ? t : {
     entity_type: d(t.entity_type),
     substate_type: p(t.substate_type),
     resource_amount: Rt(t.resource_amount)
   };
 }
-function _n(t) {
+function fn(t) {
   if (t !== void 0)
     return t === null ? null : {
       entity_type: t.entity_type,
       substate_type: t.substate_type,
-      resource_amount: wt(t.resource_amount)
+      resource_amount: Pt(t.resource_amount)
     };
 }
-var fn = Object.defineProperty, pn = Object.defineProperties, ln = Object.getOwnPropertyDescriptors, X = Object.getOwnPropertySymbols, yn = Object.prototype.hasOwnProperty, mn = Object.prototype.propertyIsEnumerable, Y = (t, e, n) => e in t ? fn(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, y = (t, e) => {
+var pn = Object.defineProperty, ln = Object.defineProperties, yn = Object.getOwnPropertyDescriptors, Y = Object.getOwnPropertySymbols, mn = Object.prototype.hasOwnProperty, Sn = Object.prototype.propertyIsEnumerable, Z = (t, e, n) => e in t ? pn(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n, m = (t, e) => {
   for (var n in e || (e = {}))
-    yn.call(e, n) && Y(t, n, e[n]);
-  if (X)
-    for (var n of X(e))
-      mn.call(e, n) && Y(t, n, e[n]);
+    mn.call(e, n) && Z(t, n, e[n]);
+  if (Y)
+    for (var n of Y(e))
+      Sn.call(e, n) && Z(t, n, e[n]);
   return t;
-}, m = (t, e) => pn(t, ln(e));
+}, S = (t, e) => ln(t, yn(e));
 function b(t) {
-  return Sn(t);
+  return hn(t);
 }
-function Sn(t, e) {
+function hn(t, e) {
   if (t == null)
     return t;
   switch (t.substate_type) {
     case "ComponentInfo":
-      return m(y({}, pt(t)), { substate_type: "ComponentInfo" });
+      return S(m({}, lt(t)), { substate_type: "ComponentInfo" });
     case "ComponentState":
-      return m(y({}, lt(t)), { substate_type: "ComponentState" });
+      return S(m({}, yt(t)), { substate_type: "ComponentState" });
     case "KeyValueStoreEntry":
-      return m(y({}, yt(t)), { substate_type: "KeyValueStoreEntry" });
+      return S(m({}, mt(t)), { substate_type: "KeyValueStoreEntry" });
     case "NonFungible":
-      return m(y({}, ht(t)), { substate_type: "NonFungible" });
+      return S(m({}, bt(t)), { substate_type: "NonFungible" });
     case "Package":
-      return m(y({}, bt(t)), { substate_type: "Package" });
+      return S(m({}, gt(t)), { substate_type: "Package" });
     case "ResourceManager":
-      return m(y({}, Nt(t)), { substate_type: "ResourceManager" });
+      return S(m({}, Tt(t)), { substate_type: "ResourceManager" });
     case "System":
-      return m(y({}, Tt(t)), { substate_type: "System" });
+      return S(m({}, wt(t)), { substate_type: "System" });
     case "Vault":
-      return m(y({}, Pt(t)), { substate_type: "Vault" });
+      return S(m({}, kt(t)), { substate_type: "Vault" });
     default:
       throw new Error(`No variant of Substate exists with 'substate_type=${t.substate_type}'`);
   }
@@ -1179,32 +1179,32 @@ function g(t) {
       case "ComponentInfo":
         return Be(t);
       case "ComponentState":
-        return Ge(t);
-      case "KeyValueStoreEntry":
         return Le(t);
+      case "KeyValueStoreEntry":
+        return Qe(t);
       case "NonFungible":
-        return Xe(t);
-      case "Package":
         return Ye(t);
+      case "Package":
+        return Ze(t);
       case "ResourceManager":
-        return tn(t);
-      case "System":
         return en(t);
+      case "System":
+        return nn(t);
       case "Vault":
-        return _n(t);
+        return fn(t);
       default:
         throw new Error(`No variant of Substate exists with 'substate_type=${t.substate_type}'`);
     }
   }
 }
-function Vi(t) {
+function Wi(t) {
   let e = !0;
   return e = e && "substate_id" in t, e = e && "version" in t, e = e && "substate_hex" in t, e = e && "substate_data_hash" in t, e = e && "substate_data" in t, e;
 }
-function hn(t) {
-  return bn(t);
+function bn(t) {
+  return gn(t);
 }
-function bn(t, e) {
+function gn(t, e) {
   return t == null ? t : {
     substate_id: x(t.substate_id),
     version: t.version,
@@ -1213,7 +1213,7 @@ function bn(t, e) {
     substate_data: b(t.substate_data)
   };
 }
-function gn(t) {
+function On(t) {
   if (t !== void 0)
     return t === null ? null : {
       substate_id: E(t.substate_id),
@@ -1223,31 +1223,31 @@ function gn(t) {
       substate_data: g(t.substate_data)
     };
 }
-function Ci(t) {
+function zi(t) {
   let e = !0;
   return e = e && "down_virtual_substates" in t, e = e && "up_substates" in t, e = e && "down_substates" in t, e = e && "new_global_entities" in t, e;
 }
-function On(t) {
-  return Nn(t);
+function Nn(t) {
+  return Tn(t);
 }
-function Nn(t, e) {
+function Tn(t, e) {
   return t == null ? t : {
     down_virtual_substates: t.down_virtual_substates.map(x),
-    up_substates: t.up_substates.map(hn),
-    down_substates: t.down_substates.map(ve),
-    new_global_entities: t.new_global_entities.map(Me)
+    up_substates: t.up_substates.map(bn),
+    down_substates: t.down_substates.map($e),
+    new_global_entities: t.new_global_entities.map(Ue)
   };
 }
-function Tn(t) {
+function wn(t) {
   if (t !== void 0)
     return t === null ? null : {
       down_virtual_substates: t.down_virtual_substates.map(E),
-      up_substates: t.up_substates.map(gn),
-      down_substates: t.down_substates.map(Ke),
+      up_substates: t.up_substates.map(On),
+      down_substates: t.down_substates.map(Me),
       new_global_entities: t.new_global_entities.map(ze)
     };
 }
-const qi = {
+const Bi = {
   Succeeded: "Succeeded",
   Failed: "Failed",
   Rejected: "Rejected"
@@ -1258,110 +1258,110 @@ function Fn(t) {
 function Jn(t, e) {
   return t;
 }
-function Ai(t) {
+function Hi(t) {
   return t;
 }
-function vi(t) {
+function Gi(t) {
   let e = !0;
   return e = e && "status" in t, e = e && "fee_summary" in t, e = e && "state_updates" in t, e;
 }
 function Rn(t) {
-  return wn(t);
+  return Pn(t);
 }
-function wn(t, e) {
+function Pn(t, e) {
   return t == null ? t : {
     status: Fn(t.status),
-    fee_summary: Ee(t.fee_summary),
-    state_updates: On(t.state_updates),
-    output: _(t, "output") ? t.output.map(_t) : void 0,
+    fee_summary: Ie(t.fee_summary),
+    state_updates: Nn(t.state_updates),
+    output: _(t, "output") ? t.output.map(ft) : void 0,
     error_message: _(t, "error_message") ? t.error_message : void 0
   };
 }
-function Pn(t) {
+function kn(t) {
   if (t !== void 0)
     return t === null ? null : {
       status: t.status,
-      fee_summary: De(t.fee_summary),
-      state_updates: Tn(t.state_updates),
-      output: t.output === void 0 ? void 0 : t.output.map(ft),
+      fee_summary: Ce(t.fee_summary),
+      state_updates: wn(t.state_updates),
+      output: t.output === void 0 ? void 0 : t.output.map(pt),
       error_message: t.error_message
     };
 }
-function $i(t) {
+function Li(t) {
   let e = !0;
   return e = e && "state_version" in t, e = e && "receipt" in t, e;
 }
-function kn(t) {
-  return xn(t);
+function xn(t) {
+  return En(t);
 }
-function xn(t, e) {
+function En(t, e) {
   return t == null ? t : {
     state_version: t.state_version,
-    notarized_transaction: _(t, "notarized_transaction") ? Pe(t.notarized_transaction) : void 0,
+    notarized_transaction: _(t, "notarized_transaction") ? ke(t.notarized_transaction) : void 0,
     receipt: Rn(t.receipt)
   };
 }
-function En(t) {
+function In(t) {
   if (t !== void 0)
     return t === null ? null : {
       state_version: t.state_version,
-      notarized_transaction: xe(t.notarized_transaction),
-      receipt: Pn(t.receipt)
+      notarized_transaction: Ee(t.notarized_transaction),
+      receipt: kn(t.receipt)
     };
 }
-function Ki(t) {
+function Qi(t) {
   let e = !0;
   return e = e && "package_address" in t, e = e && "blueprint_name" in t, e;
 }
-function Mi(t) {
-  return In(t);
+function Xi(t) {
+  return Vn(t);
 }
-function In(t, e) {
+function Vn(t, e) {
   return t == null ? t : {
     package_address: t.package_address,
     blueprint_name: t.blueprint_name
   };
 }
-function Ui(t) {
+function Yi(t) {
   if (t !== void 0)
     return t === null ? null : {
       package_address: t.package_address,
       blueprint_name: t.blueprint_name
     };
 }
-function zi(t) {
+function Zi(t) {
   let e = !0;
   return e = e && "data_struct" in t, e;
 }
-function Bi(t) {
-  return Dn(t);
+function ji(t) {
+  return Cn(t);
 }
-function Dn(t, e) {
+function Cn(t, e) {
   return t == null ? t : {
     data_struct: N(t.data_struct)
   };
 }
-function Wi(t) {
+function to(t) {
   if (t !== void 0)
     return t === null ? null : {
       data_struct: T(t.data_struct)
     };
 }
-function Hi(t) {
+function eo(t) {
   let e = !0;
   return e = e && "code" in t, e = e && "message" in t, e;
 }
-function Gi(t) {
-  return Vn(t);
+function no(t) {
+  return Dn(t);
 }
-function Vn(t, e) {
+function Dn(t, e) {
   return t == null ? t : {
     code: t.code,
     message: t.message,
     trace_id: _(t, "trace_id") ? t.trace_id : void 0
   };
 }
-function Li(t) {
+function ro(t) {
   if (t !== void 0)
     return t === null ? null : {
       code: t.code,
@@ -1369,39 +1369,39 @@ function Li(t) {
       trace_id: t.trace_id
     };
 }
-function Qi(t) {
+function io(t) {
   let e = !0;
   return e = e && "amount_attos" in t, e;
 }
-function Xi(t) {
-  return Cn(t);
+function oo(t) {
+  return qn(t);
 }
-function Cn(t, e) {
+function qn(t, e) {
   return t == null ? t : {
     amount_attos: t.amount_attos
   };
 }
-function Yi(t) {
+function so(t) {
   if (t !== void 0)
     return t === null ? null : {
       amount_attos: t.amount_attos
     };
 }
-function Zi(t) {
+function uo(t) {
   let e = !0;
   return e = e && "key_hex" in t, e = e && "is_deleted" in t, e;
 }
-function ji(t) {
-  return qn(t);
+function ao(t) {
+  return An(t);
 }
-function qn(t, e) {
+function An(t, e) {
   return t == null ? t : {
     key_hex: t.key_hex,
     is_deleted: t.is_deleted,
     data_struct: _(t, "data_struct") ? N(t.data_struct) : void 0
   };
 }
-function to(t) {
+function co(t) {
   if (t !== void 0)
     return t === null ? null : {
       key_hex: t.key_hex,
@@ -1409,92 +1409,92 @@ function to(t) {
       data_struct: T(t.data_struct)
     };
 }
-function eo(t) {
+function _o(t) {
   let e = !0;
   return e = e && "nf_ids_hex" in t, e;
 }
-function no(t) {
-  return An(t);
+function fo(t) {
+  return vn(t);
 }
-function An(t, e) {
+function vn(t, e) {
   return t == null ? t : {
     nf_ids_hex: t.nf_ids_hex
   };
 }
-function ro(t) {
+function po(t) {
   if (t !== void 0)
     return t === null ? null : {
       nf_ids_hex: t.nf_ids_hex
     };
 }
-function io(t) {
+function lo(t) {
   let e = !0;
   return e = e && "nf_id_hex" in t, e = e && "is_deleted" in t, e;
 }
-function oo(t) {
-  return vn(t);
-}
-function vn(t, e) {
-  return t == null ? t : {
-    nf_id_hex: t.nf_id_hex,
-    is_deleted: t.is_deleted,
-    non_fungible_data: _(t, "non_fungible_data") ? mt(t.non_fungible_data) : void 0
-  };
-}
-function uo(t) {
-  if (t !== void 0)
-    return t === null ? null : {
-      nf_id_hex: t.nf_id_hex,
-      is_deleted: t.is_deleted,
-      non_fungible_data: St(t.non_fungible_data)
-    };
-}
-function so(t) {
-  let e = !0;
-  return e = e && "code_hex" in t, e;
-}
-function ao(t) {
+function yo(t) {
   return $n(t);
 }
 function $n(t, e) {
   return t == null ? t : {
+    nf_id_hex: t.nf_id_hex,
+    is_deleted: t.is_deleted,
+    non_fungible_data: _(t, "non_fungible_data") ? St(t.non_fungible_data) : void 0
+  };
+}
+function mo(t) {
+  if (t !== void 0)
+    return t === null ? null : {
+      nf_id_hex: t.nf_id_hex,
+      is_deleted: t.is_deleted,
+      non_fungible_data: ht(t.non_fungible_data)
+    };
+}
+function So(t) {
+  let e = !0;
+  return e = e && "code_hex" in t, e;
+}
+function ho(t) {
+  return Kn(t);
+}
+function Kn(t, e) {
+  return t == null ? t : {
     code_hex: t.code_hex
   };
 }
-function co(t) {
+function bo(t) {
   if (t !== void 0)
     return t === null ? null : {
       code_hex: t.code_hex
     };
 }
-function _o(t) {
+function go(t) {
   let e = !0;
   return e = e && "resource_type" in t, e = e && "resource_address" in t, e;
 }
-function fo(t) {
-  return Kn(t);
+function Oo(t) {
+  return Mn(t);
 }
-function Kn(t, e) {
+function Mn(t, e) {
   return t == null ? t : {
-    resource_type: w(t.resource_type),
+    resource_type: R(t.resource_type),
     resource_address: t.resource_address
   };
 }
-function po(t) {
+function No(t) {
   if (t !== void 0)
     return t === null ? null : {
       resource_type: t.resource_type,
       resource_address: t.resource_address
     };
 }
-function lo(t) {
+function To(t) {
   let e = !0;
   return e = e && "resource_address" in t, e = e && "component_address" in t, e = e && "vault_entity_id" in t, e = e && "amount_attos" in t, e;
 }
-function yo(t) {
-  return Mn(t);
+function wo(t) {
+  return Un(t);
 }
-function Mn(t, e) {
+function Un(t, e) {
   return t == null ? t : {
     resource_address: t.resource_address,
     component_address: t.component_address,
@@ -1502,7 +1502,7 @@ function Mn(t, e) {
     amount_attos: t.amount_attos
   };
 }
-function mo(t) {
+function Fo(t) {
   if (t !== void 0)
     return t === null ? null : {
       resource_address: t.resource_address,
@@ -1511,35 +1511,35 @@ function mo(t) {
       amount_attos: t.amount_attos
     };
 }
-function So(t) {
+function Jo(t) {
   let e = !0;
   return e = e && "resource_type" in t, e = e && "metadata" in t, e = e && "total_supply_attos" in t, e;
 }
-function ho(t) {
-  return Un(t);
+function Ro(t) {
+  return Wn(t);
 }
-function Un(t, e) {
+function Wn(t, e) {
   return t == null ? t : {
-    resource_type: w(t.resource_type),
+    resource_type: R(t.resource_type),
     fungible_divisibility: _(t, "fungible_divisibility") ? t.fungible_divisibility : void 0,
-    metadata: t.metadata.map(gt),
+    metadata: t.metadata.map(Ot),
     total_supply_attos: t.total_supply_attos
   };
 }
-function bo(t) {
+function Po(t) {
   if (t !== void 0)
     return t === null ? null : {
       resource_type: t.resource_type,
       fungible_divisibility: t.fungible_divisibility,
-      metadata: t.metadata.map(Ot),
+      metadata: t.metadata.map(Nt),
       total_supply_attos: t.total_supply_attos
     };
 }
-function go(t) {
+function ko(t) {
   let e = !0;
   return e = e && "entity_type" in t, e = e && "substate_type" in t, e;
 }
-function Oo(t) {
+function xo(t) {
   return zn(t);
 }
 function zn(t, e) {
@@ -1548,18 +1548,18 @@ function zn(t, e) {
     substate_type: p(t.substate_type)
   };
 }
-function No(t) {
+function Eo(t) {
   if (t !== void 0)
     return t === null ? null : {
       entity_type: t.entity_type,
       substate_type: t.substate_type
     };
 }
-function To(t) {
+function Io(t) {
   let e = !0;
   return e = e && "epoch" in t, e;
 }
-function Fo(t) {
+function Vo(t) {
   return Bn(t);
 }
 function Bn(t, e) {
@@ -1567,27 +1567,27 @@ function Bn(t, e) {
     epoch: t.epoch
   };
 }
-function Jo(t) {
+function Co(t) {
   if (t !== void 0)
     return t === null ? null : {
       epoch: t.epoch
     };
 }
-function Ro(t) {
+function Do(t) {
   let e = !0;
   return e = e && "intent_hash" in t, e = e && "signatures_hash" in t, e = e && "payload_hash" in t, e;
 }
-function wo(t) {
-  return Wn(t);
+function qo(t) {
+  return Hn(t);
 }
-function Wn(t, e) {
+function Hn(t, e) {
   return t == null ? t : {
     intent_hash: t.intent_hash,
     signatures_hash: t.signatures_hash,
     payload_hash: t.payload_hash
   };
 }
-function Po(t) {
+function Ao(t) {
   if (t !== void 0)
     return t === null ? null : {
       intent_hash: t.intent_hash,
@@ -1595,57 +1595,127 @@ function Po(t) {
       payload_hash: t.payload_hash
     };
 }
-function ko(t) {
+function vo(t) {
   let e = !0;
   return e = e && "intent_hash" in t, e;
 }
-function xo(t) {
-  return Hn(t);
+function $o(t) {
+  return Gn(t);
 }
-function Hn(t, e) {
+function Gn(t, e) {
   return t == null ? t : {
     intent_hash: t.intent_hash
   };
 }
-function Gn(t) {
+function Ln(t) {
   if (t !== void 0)
     return t === null ? null : {
       intent_hash: t.intent_hash
     };
 }
-function Eo(t) {
+function Ko(t) {
   let e = !0;
   return e = e && "committed" in t, e;
 }
-function Ln(t) {
-  return Qn(t);
+function Qn(t) {
+  return Xn(t);
 }
-function Qn(t, e) {
+function Xn(t, e) {
   return t == null ? t : {
-    committed: kn(t.committed)
+    committed: xn(t.committed)
   };
 }
-function Io(t) {
+function Mo(t) {
   if (t !== void 0)
     return t === null ? null : {
-      committed: En(t.committed)
+      committed: In(t.committed)
     };
 }
-function Do(t) {
+function Uo(t) {
+  let e = !0;
+  return e = e && "core_version" in t, e = e && "api_version" in t, e;
+}
+function Yn(t) {
+  return Zn(t);
+}
+function Zn(t, e) {
+  return t == null ? t : {
+    core_version: t.core_version,
+    api_version: t.api_version
+  };
+}
+function jn(t) {
+  if (t !== void 0)
+    return t === null ? null : {
+      core_version: t.core_version,
+      api_version: t.api_version
+    };
+}
+function Wo(t) {
+  let e = !0;
+  return e = e && "account_package" in t, e = e && "faucet" in t, e = e && "ecdsa_secp256k1" in t, e = e && "eddsa_ed25519" in t, e = e && "xrd" in t, e;
+}
+function tr(t) {
+  return er(t);
+}
+function er(t, e) {
+  return t == null ? t : {
+    account_package: t.account_package,
+    faucet: t.faucet,
+    ecdsa_secp256k1: t.ecdsa_secp256k1,
+    eddsa_ed25519: t.eddsa_ed25519,
+    xrd: t.xrd
+  };
+}
+function nr(t) {
+  if (t !== void 0)
+    return t === null ? null : {
+      account_package: t.account_package,
+      faucet: t.faucet,
+      ecdsa_secp256k1: t.ecdsa_secp256k1,
+      eddsa_ed25519: t.eddsa_ed25519,
+      xrd: t.xrd
+    };
+}
+function zo(t) {
+  let e = !0;
+  return e = e && "version" in t, e = e && "network" in t, e = e && "network_hrp_suffix" in t, e = e && "well_known_addresses" in t, e;
+}
+function rr(t) {
+  return ir(t);
+}
+function ir(t, e) {
+  return t == null ? t : {
+    version: Yn(t.version),
+    network: t.network,
+    network_hrp_suffix: t.network_hrp_suffix,
+    well_known_addresses: tr(t.well_known_addresses)
+  };
+}
+function Bo(t) {
+  if (t !== void 0)
+    return t === null ? null : {
+      version: jn(t.version),
+      network: t.network,
+      network_hrp_suffix: t.network_hrp_suffix,
+      well_known_addresses: nr(t.well_known_addresses)
+    };
+}
+function Ho(t) {
   let e = !0;
   return e = e && "parent" in t, e = e && "entity_id" in t, e = e && "depth" in t, e;
 }
-function Xn(t) {
-  return Yn(t);
+function or(t) {
+  return sr(t);
 }
-function Yn(t, e) {
+function sr(t, e) {
   return t == null ? t : {
     parent: x(t.parent),
     entity_id: P(t.entity_id),
     depth: t.depth
   };
 }
-function Zn(t) {
+function ur(t) {
   if (t !== void 0)
     return t === null ? null : {
       parent: E(t.parent),
@@ -1653,197 +1723,197 @@ function Zn(t) {
       depth: t.depth
     };
 }
-function Vo(t) {
+function Go(t) {
   let e = !0;
   return e = e && "component_address" in t, e;
 }
-function Co(t) {
-  return jn(t);
+function Lo(t) {
+  return ar(t);
 }
-function jn(t, e) {
+function ar(t, e) {
   return t == null ? t : {
     component_address: t.component_address
   };
 }
-function tr(t) {
+function cr(t) {
   if (t !== void 0)
     return t === null ? null : {
       component_address: t.component_address
     };
 }
-function qo(t) {
+function Qo(t) {
   let e = !0;
   return e = e && "info" in t, e = e && "state" in t, e = e && "owned_vaults" in t, e = e && "descendent_ids" in t, e;
 }
-function er(t) {
-  return nr(t);
+function dr(t) {
+  return _r(t);
 }
-function nr(t, e) {
+function _r(t, e) {
   return t == null ? t : {
     info: b(t.info),
     state: b(t.state),
     owned_vaults: t.owned_vaults.map(b),
-    descendent_ids: t.descendent_ids.map(Xn)
+    descendent_ids: t.descendent_ids.map(or)
   };
 }
-function Ao(t) {
+function Xo(t) {
   if (t !== void 0)
     return t === null ? null : {
       info: g(t.info),
       state: g(t.state),
       owned_vaults: t.owned_vaults.map(g),
-      descendent_ids: t.descendent_ids.map(Zn)
+      descendent_ids: t.descendent_ids.map(ur)
     };
 }
-function vo(t) {
+function Yo(t) {
   let e = !0;
   return e = e && "epoch" in t, e;
 }
-function rr(t) {
-  return ir(t);
+function fr(t) {
+  return pr(t);
 }
-function ir(t, e) {
+function pr(t, e) {
   return t == null ? t : {
     epoch: t.epoch
   };
 }
-function $o(t) {
+function Zo(t) {
   if (t !== void 0)
     return t === null ? null : {
       epoch: t.epoch
     };
 }
-function Ko(t) {
+function jo(t) {
   let e = !0;
   return e = e && "resource_address" in t, e = e && "non_fungible_id_hex" in t, e;
 }
-function Mo(t) {
-  return or(t);
+function ts(t) {
+  return lr(t);
 }
-function or(t, e) {
+function lr(t, e) {
   return t == null ? t : {
     resource_address: t.resource_address,
     non_fungible_id_hex: t.non_fungible_id_hex
   };
 }
-function ur(t) {
+function yr(t) {
   if (t !== void 0)
     return t === null ? null : {
       resource_address: t.resource_address,
       non_fungible_id_hex: t.non_fungible_id_hex
     };
 }
-function Uo(t) {
+function es(t) {
   let e = !0;
   return e = e && "non_fungible" in t, e;
 }
-function sr(t) {
-  return ar(t);
+function mr(t) {
+  return Sr(t);
 }
-function ar(t, e) {
+function Sr(t, e) {
   return t == null ? t : {
     non_fungible: b(t.non_fungible)
   };
 }
-function zo(t) {
+function ns(t) {
   if (t !== void 0)
     return t === null ? null : {
       non_fungible: g(t.non_fungible)
     };
 }
-function Bo(t) {
+function rs(t) {
   let e = !0;
   return e = e && "package_address" in t, e;
 }
-function Wo(t) {
-  return cr(t);
+function is(t) {
+  return hr(t);
 }
-function cr(t, e) {
+function hr(t, e) {
   return t == null ? t : {
     package_address: t.package_address
   };
 }
-function dr(t) {
+function br(t) {
   if (t !== void 0)
     return t === null ? null : {
       package_address: t.package_address
     };
 }
-function Ho(t) {
+function os(t) {
   let e = !0;
   return e = e && "_package" in t, e;
 }
-function _r(t) {
-  return fr(t);
+function gr(t) {
+  return Or(t);
 }
-function fr(t, e) {
+function Or(t, e) {
   return t == null ? t : {
     _package: b(t.package)
   };
 }
-function Go(t) {
+function ss(t) {
   if (t !== void 0)
     return t === null ? null : {
       package: g(t._package)
     };
 }
-function Lo(t) {
+function us(t) {
   let e = !0;
   return e = e && "resource_address" in t, e;
 }
-function Qo(t) {
-  return pr(t);
+function as(t) {
+  return Nr(t);
 }
-function pr(t, e) {
+function Nr(t, e) {
   return t == null ? t : {
     resource_address: t.resource_address
   };
 }
-function lr(t) {
+function Tr(t) {
   if (t !== void 0)
     return t === null ? null : {
       resource_address: t.resource_address
     };
 }
-function Xo(t) {
+function cs(t) {
   let e = !0;
   return e = e && "manager" in t, e;
 }
-function yr(t) {
-  return mr(t);
+function wr(t) {
+  return Fr(t);
 }
-function mr(t, e) {
+function Fr(t, e) {
   return t == null ? t : {
     manager: b(t.manager)
   };
 }
-function Yo(t) {
+function ds(t) {
   if (t !== void 0)
     return t === null ? null : {
       manager: g(t.manager)
     };
 }
-const Zo = {
+const _s = {
   CommittedSuccess: "CommittedSuccess",
   CommittedFailure: "CommittedFailure",
   InMempool: "InMempool",
   Rejected: "Rejected"
 };
-function jo(t) {
+function fs(t) {
   let e = !0;
   return e = e && "payload_hash" in t, e = e && "status" in t, e;
 }
-function Sr(t) {
-  return hr(t);
+function Jr(t) {
+  return Rr(t);
 }
-function hr(t, e) {
+function Rr(t, e) {
   return t == null ? t : {
     payload_hash: t.payload_hash,
     status: t.status,
     error_message: _(t, "error_message") ? t.error_message : void 0
   };
 }
-function br(t) {
+function Pr(t) {
   if (t !== void 0)
     return t === null ? null : {
       payload_hash: t.payload_hash,
@@ -1851,122 +1921,122 @@ function br(t) {
       error_message: t.error_message
     };
 }
-function tu(t) {
+function ps(t) {
   let e = !0;
   return e = e && "intent_hash" in t, e;
 }
-function eu(t) {
-  return gr(t);
+function ls(t) {
+  return kr(t);
 }
-function gr(t, e) {
+function kr(t, e) {
   return t == null ? t : {
     intent_hash: t.intent_hash
   };
 }
-function Or(t) {
+function xr(t) {
   if (t !== void 0)
     return t === null ? null : {
       intent_hash: t.intent_hash
     };
 }
-const nu = {
+const ys = {
   CommittedSuccess: "CommittedSuccess",
   CommittedFailure: "CommittedFailure",
   InMempool: "InMempool",
   Rejected: "Rejected",
   Unknown: "Unknown"
 };
-function ru(t) {
+function ms(t) {
   let e = !0;
   return e = e && "intent_status" in t, e = e && "known_payloads" in t, e;
 }
-function Nr(t) {
-  return Tr(t);
+function Er(t) {
+  return Ir(t);
 }
-function Tr(t, e) {
+function Ir(t, e) {
   return t == null ? t : {
     intent_status: t.intent_status,
-    known_payloads: t.known_payloads.map(Sr)
+    known_payloads: t.known_payloads.map(Jr)
   };
 }
-function iu(t) {
+function Ss(t) {
   if (t !== void 0)
     return t === null ? null : {
       intent_status: t.intent_status,
-      known_payloads: t.known_payloads.map(br)
+      known_payloads: t.known_payloads.map(Pr)
     };
 }
-function ou(t) {
+function hs(t) {
   let e = !0;
   return e = e && "notarized_transaction_hex" in t, e;
 }
-function uu(t) {
-  return Fr(t);
+function bs(t) {
+  return Vr(t);
 }
-function Fr(t, e) {
+function Vr(t, e) {
   return t == null ? t : {
     notarized_transaction_hex: t.notarized_transaction_hex
   };
 }
-function Jr(t) {
+function Cr(t) {
   if (t !== void 0)
     return t === null ? null : {
       notarized_transaction_hex: t.notarized_transaction_hex
     };
 }
-function su(t) {
+function gs(t) {
   let e = !0;
   return e = e && "duplicate" in t, e;
 }
-function Rr(t) {
-  return wr(t);
+function Dr(t) {
+  return qr(t);
 }
-function wr(t, e) {
+function qr(t, e) {
   return t == null ? t : {
     duplicate: t.duplicate
   };
 }
-function au(t) {
+function Os(t) {
   if (t !== void 0)
     return t === null ? null : {
       duplicate: t.duplicate
     };
 }
-function cu(t) {
+function Ns(t) {
   let e = !0;
   return e = e && "resource_amount" in t, e;
 }
-function du(t) {
-  return Pr(t);
+function Ts(t) {
+  return Ar(t);
 }
-function Pr(t, e) {
+function Ar(t, e) {
   return t == null ? t : {
     resource_amount: Rt(t.resource_amount)
   };
 }
-function _u(t) {
+function ws(t) {
   if (t !== void 0)
     return t === null ? null : {
-      resource_amount: wt(t.resource_amount)
+      resource_amount: Pt(t.resource_amount)
     };
 }
 var f = (t, e, n) => new Promise((i, r) => {
-  var o = (s) => {
+  var o = (u) => {
     try {
-      a(n.next(s));
+      a(n.next(u));
     } catch (c) {
       r(c);
     }
-  }, u = (s) => {
+  }, s = (u) => {
     try {
-      a(n.throw(s));
+      a(n.throw(u));
     } catch (c) {
       r(c);
     }
-  }, a = (s) => s.done ? i(s.value) : Promise.resolve(s.value).then(o, u);
+  }, a = (u) => u.done ? i(u.value) : Promise.resolve(u.value).then(o, s);
   a((n = n.apply(t, e)).next());
 });
-class fu extends j {
+class Fs extends V {
   stateComponentPostRaw(e, n) {
     return f(this, null, function* () {
       if (e.v0StateComponentRequest === null || e.v0StateComponentRequest === void 0)
@@ -1978,9 +2048,9 @@ class fu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: tr(e.v0StateComponentRequest)
+        body: cr(e.v0StateComponentRequest)
       }, n);
-      return new S(o, (u) => er(u));
+      return new l(o, (s) => dr(s));
     });
   }
   stateComponentPost(e, n) {
@@ -1996,7 +2066,7 @@ class fu extends j {
         headers: i,
         query: n
       }, e);
-      return new S(r, (o) => rr(o));
+      return new l(r, (o) => fr(o));
     });
   }
   stateEpochPost(e) {
@@ -2015,9 +2085,9 @@ class fu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: ur(e.v0StateNonFungibleRequest)
+        body: yr(e.v0StateNonFungibleRequest)
       }, n);
-      return new S(o, (u) => sr(u));
+      return new l(o, (s) => mr(s));
     });
   }
   stateNonFungiblePost(e, n) {
@@ -2036,9 +2106,9 @@ class fu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: dr(e.v0StatePackageRequest)
+        body: br(e.v0StatePackageRequest)
       }, n);
-      return new S(o, (u) => _r(u));
+      return new l(o, (s) => gr(s));
     });
   }
   statePackagePost(e, n) {
@@ -2057,9 +2127,9 @@ class fu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: lr(e.v0StateResourceRequest)
+        body: Tr(e.v0StateResourceRequest)
       }, n);
-      return new S(o, (u) => yr(u));
+      return new l(o, (s) => wr(s));
     });
   }
   stateResourcePost(e, n) {
@@ -2068,23 +2138,57 @@ class fu extends j {
     });
   }
 }
-var O = (t, e, n) => new Promise((i, r) => {
-  var o = (s) => {
+var j = (t, e, n) => new Promise((i, r) => {
+  var o = (u) => {
     try {
-      a(n.next(s));
+      a(n.next(u));
     } catch (c) {
       r(c);
     }
-  }, u = (s) => {
+  }, s = (u) => {
     try {
-      a(n.throw(s));
+      a(n.throw(u));
     } catch (c) {
       r(c);
     }
-  }, a = (s) => s.done ? i(s.value) : Promise.resolve(s.value).then(o, u);
+  }, a = (u) => u.done ? i(u.value) : Promise.resolve(u.value).then(o, s);
   a((n = n.apply(t, e)).next());
 });
-class pu extends j {
+class Js extends V {
+  statusNetworkConfigurationPostRaw(e) {
+    return j(this, null, function* () {
+      const n = {}, i = {}, r = yield this.request({
+        path: "/status/network-configuration",
+        method: "POST",
+        headers: i,
+        query: n
+      }, e);
+      return new l(r, (o) => rr(o));
+    });
+  }
+  statusNetworkConfigurationPost(e) {
+    return j(this, null, function* () {
+      return yield (yield this.statusNetworkConfigurationPostRaw(e)).value();
+    });
+  }
+}
+var O = (t, e, n) => new Promise((i, r) => {
+  var o = (u) => {
+    try {
+      a(n.next(u));
+    } catch (c) {
+      r(c);
+    }
+  }, s = (u) => {
+    try {
+      a(n.throw(u));
+    } catch (c) {
+      r(c);
+    }
+  }, a = (u) => u.done ? i(u.value) : Promise.resolve(u.value).then(o, s);
+  a((n = n.apply(t, e)).next());
+});
+class Rs extends V {
   transactionReceiptPostRaw(e, n) {
     return O(this, null, function* () {
       if (e.v0CommittedTransactionRequest === null || e.v0CommittedTransactionRequest === void 0)
@@ -2096,9 +2200,9 @@ class pu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: Gn(e.v0CommittedTransactionRequest)
+        body: Ln(e.v0CommittedTransactionRequest)
       }, n);
-      return new S(o, (u) => Ln(u));
+      return new l(o, (s) => Qn(s));
     });
   }
   transactionReceiptPost(e, n) {
@@ -2117,9 +2221,9 @@ class pu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: Or(e.v0TransactionStatusRequest)
+        body: xr(e.v0TransactionStatusRequest)
       }, n);
-      return new S(o, (u) => Nr(u));
+      return new l(o, (s) => Er(s));
     });
   }
   transactionStatusPost(e, n) {
@@ -2138,9 +2242,9 @@ class pu extends j {
         method: "POST",
         headers: r,
         query: i,
-        body: Jr(e.v0TransactionSubmitRequest)
+        body: Cr(e.v0TransactionSubmitRequest)
       }, n);
-      return new S(o, (u) => Rr(u));
+      return new l(o, (s) => Dr(s));
     });
   }
   transactionSubmitPost(e, n) {
@@ -2150,323 +2254,336 @@ class pu extends j {
   }
 }
 export {
-  Vt as BASE_PATH,
-  j as BaseAPI,
-  Dr as BlobApiResponse,
-  kr as COLLECTION_FORMATS,
-  qr as CommittedStateIdentifierFromJSON,
-  Mt as CommittedStateIdentifierFromJSONTyped,
-  Ar as CommittedStateIdentifierToJSON,
-  kn as CommittedTransactionFromJSON,
-  xn as CommittedTransactionFromJSONTyped,
-  En as CommittedTransactionToJSON,
-  Mi as ComponentInfoSubstateAllOfFromJSON,
-  In as ComponentInfoSubstateAllOfFromJSONTyped,
-  Ui as ComponentInfoSubstateAllOfToJSON,
-  ci as ComponentInfoSubstateFromJSON,
-  pt as ComponentInfoSubstateFromJSONTyped,
+  Dt as BASE_PATH,
+  V as BaseAPI,
+  Ur as BlobApiResponse,
+  vr as COLLECTION_FORMATS,
+  Br as CommittedStateIdentifierFromJSON,
+  Ut as CommittedStateIdentifierFromJSONTyped,
+  Hr as CommittedStateIdentifierToJSON,
+  xn as CommittedTransactionFromJSON,
+  En as CommittedTransactionFromJSONTyped,
+  In as CommittedTransactionToJSON,
+  Xi as ComponentInfoSubstateAllOfFromJSON,
+  Vn as ComponentInfoSubstateAllOfFromJSONTyped,
+  Yi as ComponentInfoSubstateAllOfToJSON,
+  hi as ComponentInfoSubstateFromJSON,
+  lt as ComponentInfoSubstateFromJSONTyped,
   Be as ComponentInfoSubstateToJSON,
-  Bi as ComponentStateSubstateAllOfFromJSON,
-  Dn as ComponentStateSubstateAllOfFromJSONTyped,
-  Wi as ComponentStateSubstateAllOfToJSON,
-  pi as ComponentStateSubstateFromJSON,
-  lt as ComponentStateSubstateFromJSONTyped,
-  Ge as ComponentStateSubstateToJSON,
-  Ct as Configuration,
+  ji as ComponentStateSubstateAllOfFromJSON,
+  Cn as ComponentStateSubstateAllOfFromJSONTyped,
+  to as ComponentStateSubstateAllOfToJSON,
+  Ni as ComponentStateSubstateFromJSON,
+  yt as ComponentStateSubstateFromJSONTyped,
+  Le as ComponentStateSubstateToJSON,
+  qt as Configuration,
   N as DataStructFromJSON,
-  He as DataStructFromJSONTyped,
+  Ge as DataStructFromJSONTyped,
   T as DataStructToJSON,
-  qt as DefaultConfig,
-  ve as DownSubstateFromJSON,
-  $e as DownSubstateFromJSONTyped,
-  Ke as DownSubstateToJSON,
-  Lr as EcdsaSecp256k1PublicKeyFromJSON,
-  dt as EcdsaSecp256k1PublicKeyFromJSONTyped,
-  de as EcdsaSecp256k1PublicKeyToJSON,
+  At as DefaultConfig,
+  $e as DownSubstateFromJSON,
+  Ke as DownSubstateFromJSONTyped,
+  Me as DownSubstateToJSON,
+  ri as EcdsaSecp256k1PublicKeyFromJSON,
+  _t as EcdsaSecp256k1PublicKeyFromJSONTyped,
+  _e as EcdsaSecp256k1PublicKeyToJSON,
   zt as EcdsaSecp256k1SignatureFromJSON,
-  nt as EcdsaSecp256k1SignatureFromJSONTyped,
-  rt as EcdsaSecp256k1SignatureToJSON,
-  zr as EcdsaSecp256k1SignatureWithPublicKeyFromJSON,
+  rt as EcdsaSecp256k1SignatureFromJSONTyped,
+  it as EcdsaSecp256k1SignatureToJSON,
+  Zr as EcdsaSecp256k1SignatureWithPublicKeyFromJSON,
   ut as EcdsaSecp256k1SignatureWithPublicKeyFromJSONTyped,
-  jt as EcdsaSecp256k1SignatureWithPublicKeyToJSON,
-  te as EddsaEd25519PublicKeyFromJSON,
-  st as EddsaEd25519PublicKeyFromJSONTyped,
-  at as EddsaEd25519PublicKeyToJSON,
+  te as EcdsaSecp256k1SignatureWithPublicKeyToJSON,
+  ee as EddsaEd25519PublicKeyFromJSON,
+  at as EddsaEd25519PublicKeyFromJSONTyped,
+  ct as EddsaEd25519PublicKeyToJSON,
   Bt as EddsaEd25519SignatureFromJSON,
-  it as EddsaEd25519SignatureFromJSONTyped,
-  ot as EddsaEd25519SignatureToJSON,
-  Hr as EddsaEd25519SignatureWithPublicKeyFromJSON,
-  ct as EddsaEd25519SignatureWithPublicKeyFromJSONTyped,
-  ee as EddsaEd25519SignatureWithPublicKeyToJSON,
+  ot as EddsaEd25519SignatureFromJSONTyped,
+  st as EddsaEd25519SignatureToJSON,
+  ei as EddsaEd25519SignatureWithPublicKeyFromJSON,
+  dt as EddsaEd25519SignatureWithPublicKeyFromJSONTyped,
+  ne as EddsaEd25519SignatureWithPublicKeyToJSON,
   P as EntityIdFromJSON,
-  We as EntityIdFromJSONTyped,
+  He as EntityIdFromJSONTyped,
   k as EntityIdToJSON,
-  ei as EntityType,
+  di as EntityType,
   d as EntityTypeFromJSON,
-  Ce as EntityTypeFromJSONTyped,
-  ni as EntityTypeToJSON,
-  Gi as ErrorResponseFromJSON,
-  Vn as ErrorResponseFromJSONTyped,
-  Li as ErrorResponseToJSON,
-  Ee as FeeSummaryFromJSON,
-  Ie as FeeSummaryFromJSONTyped,
-  De as FeeSummaryToJSON,
-  Kt as FetchError,
-  Xi as FungibleResourceAmountAllOfFromJSON,
-  Cn as FungibleResourceAmountAllOfFromJSONTyped,
-  Yi as FungibleResourceAmountAllOfToJSON,
-  ki as FungibleResourceAmountFromJSON,
+  qe as EntityTypeFromJSONTyped,
+  _i as EntityTypeToJSON,
+  no as ErrorResponseFromJSON,
+  Dn as ErrorResponseFromJSONTyped,
+  ro as ErrorResponseToJSON,
+  Ie as FeeSummaryFromJSON,
+  Ve as FeeSummaryFromJSONTyped,
+  Ce as FeeSummaryToJSON,
+  Mt as FetchError,
+  oo as FungibleResourceAmountAllOfFromJSON,
+  qn as FungibleResourceAmountAllOfFromJSONTyped,
+  so as FungibleResourceAmountAllOfToJSON,
+  vi as FungibleResourceAmountFromJSON,
   Ft as FungibleResourceAmountFromJSONTyped,
-  nn as FungibleResourceAmountToJSON,
-  Me as GlobalEntityIdFromJSON,
-  Ue as GlobalEntityIdFromJSONTyped,
+  rn as FungibleResourceAmountToJSON,
+  Ue as GlobalEntityIdFromJSON,
+  We as GlobalEntityIdFromJSONTyped,
   ze as GlobalEntityIdToJSON,
-  S as JSONApiResponse,
-  ji as KeyValueStoreEntrySubstateAllOfFromJSON,
-  qn as KeyValueStoreEntrySubstateAllOfFromJSONTyped,
-  to as KeyValueStoreEntrySubstateAllOfToJSON,
-  yi as KeyValueStoreEntrySubstateFromJSON,
-  yt as KeyValueStoreEntrySubstateFromJSONTyped,
-  Le as KeyValueStoreEntrySubstateToJSON,
-  mt as NonFungibleDataFromJSON,
-  Qe as NonFungibleDataFromJSONTyped,
-  St as NonFungibleDataToJSON,
-  no as NonFungibleResourceAmountAllOfFromJSON,
-  An as NonFungibleResourceAmountAllOfFromJSONTyped,
-  ro as NonFungibleResourceAmountAllOfToJSON,
-  Ei as NonFungibleResourceAmountFromJSON,
+  l as JSONApiResponse,
+  ao as KeyValueStoreEntrySubstateAllOfFromJSON,
+  An as KeyValueStoreEntrySubstateAllOfFromJSONTyped,
+  co as KeyValueStoreEntrySubstateAllOfToJSON,
+  wi as KeyValueStoreEntrySubstateFromJSON,
+  mt as KeyValueStoreEntrySubstateFromJSONTyped,
+  Qe as KeyValueStoreEntrySubstateToJSON,
+  St as NonFungibleDataFromJSON,
+  Xe as NonFungibleDataFromJSONTyped,
+  ht as NonFungibleDataToJSON,
+  fo as NonFungibleResourceAmountAllOfFromJSON,
+  vn as NonFungibleResourceAmountAllOfFromJSONTyped,
+  po as NonFungibleResourceAmountAllOfToJSON,
+  Ki as NonFungibleResourceAmountFromJSON,
   Jt as NonFungibleResourceAmountFromJSONTyped,
-  rn as NonFungibleResourceAmountToJSON,
-  oo as NonFungibleSubstateAllOfFromJSON,
-  vn as NonFungibleSubstateAllOfFromJSONTyped,
-  uo as NonFungibleSubstateAllOfToJSON,
-  hi as NonFungibleSubstateFromJSON,
-  ht as NonFungibleSubstateFromJSONTyped,
-  Xe as NonFungibleSubstateToJSON,
-  Pe as NotarizedTransactionFromJSON,
-  ke as NotarizedTransactionFromJSONTyped,
-  xe as NotarizedTransactionToJSON,
-  ao as PackageSubstateAllOfFromJSON,
-  $n as PackageSubstateAllOfFromJSONTyped,
-  co as PackageSubstateAllOfToJSON,
-  gi as PackageSubstateFromJSON,
-  bt as PackageSubstateFromJSONTyped,
-  Ye as PackageSubstateToJSON,
-  me as PublicKeyFromJSON,
-  Se as PublicKeyFromJSONTyped,
-  he as PublicKeyToJSON,
-  vr as PublicKeyType,
-  F as PublicKeyTypeFromJSON,
-  Ut as PublicKeyTypeFromJSONTyped,
-  $r as PublicKeyTypeToJSON,
+  on as NonFungibleResourceAmountToJSON,
+  yo as NonFungibleSubstateAllOfFromJSON,
+  $n as NonFungibleSubstateAllOfFromJSONTyped,
+  mo as NonFungibleSubstateAllOfToJSON,
+  Ri as NonFungibleSubstateFromJSON,
+  bt as NonFungibleSubstateFromJSONTyped,
+  Ye as NonFungibleSubstateToJSON,
+  ke as NotarizedTransactionFromJSON,
+  xe as NotarizedTransactionFromJSONTyped,
+  Ee as NotarizedTransactionToJSON,
+  ho as PackageSubstateAllOfFromJSON,
+  Kn as PackageSubstateAllOfFromJSONTyped,
+  bo as PackageSubstateAllOfToJSON,
+  ki as PackageSubstateFromJSON,
+  gt as PackageSubstateFromJSONTyped,
+  Ze as PackageSubstateToJSON,
+  Se as PublicKeyFromJSON,
+  he as PublicKeyFromJSONTyped,
+  be as PublicKeyToJSON,
+  Gr as PublicKeyType,
+  w as PublicKeyTypeFromJSON,
+  Wt as PublicKeyTypeFromJSONTyped,
+  Lr as PublicKeyTypeToJSON,
   h as RequiredError,
-  fo as ResourceAmountBaseFromJSON,
-  Kn as ResourceAmountBaseFromJSONTyped,
-  po as ResourceAmountBaseToJSON,
+  Oo as ResourceAmountBaseFromJSON,
+  Mn as ResourceAmountBaseFromJSONTyped,
+  No as ResourceAmountBaseToJSON,
   Rt as ResourceAmountFromJSON,
-  dn as ResourceAmountFromJSONTyped,
-  wt as ResourceAmountToJSON,
-  yo as ResourceChangeFromJSON,
-  Mn as ResourceChangeFromJSONTyped,
-  mo as ResourceChangeToJSON,
-  ho as ResourceManagerSubstateAllOfFromJSON,
-  Un as ResourceManagerSubstateAllOfFromJSONTyped,
-  gt as ResourceManagerSubstateAllOfMetadataFromJSON,
-  Ze as ResourceManagerSubstateAllOfMetadataFromJSONTyped,
-  Ot as ResourceManagerSubstateAllOfMetadataToJSON,
-  bo as ResourceManagerSubstateAllOfToJSON,
-  Ji as ResourceManagerSubstateFromJSON,
-  Nt as ResourceManagerSubstateFromJSONTyped,
-  tn as ResourceManagerSubstateToJSON,
-  Ni as ResourceType,
-  w as ResourceTypeFromJSON,
-  je as ResourceTypeFromJSONTyped,
-  Ti as ResourceTypeToJSON,
-  $t as ResponseError,
-  _t as SborDataFromJSON,
-  Ve as SborDataFromJSONTyped,
-  ft as SborDataToJSON,
-  Xt as SignatureFromJSON,
-  Yt as SignatureFromJSONTyped,
-  Zt as SignatureToJSON,
-  se as SignatureWithPublicKeyFromJSON,
-  ae as SignatureWithPublicKeyFromJSONTyped,
-  ce as SignatureWithPublicKeyToJSON,
+  _n as ResourceAmountFromJSONTyped,
+  Pt as ResourceAmountToJSON,
+  wo as ResourceChangeFromJSON,
+  Un as ResourceChangeFromJSONTyped,
+  Fo as ResourceChangeToJSON,
+  Ro as ResourceManagerSubstateAllOfFromJSON,
+  Wn as ResourceManagerSubstateAllOfFromJSONTyped,
+  Ot as ResourceManagerSubstateAllOfMetadataFromJSON,
+  je as ResourceManagerSubstateAllOfMetadataFromJSONTyped,
+  Nt as ResourceManagerSubstateAllOfMetadataToJSON,
+  Po as ResourceManagerSubstateAllOfToJSON,
+  Ci as ResourceManagerSubstateFromJSON,
+  Tt as ResourceManagerSubstateFromJSONTyped,
+  en as ResourceManagerSubstateToJSON,
+  Ei as ResourceType,
+  R as ResourceTypeFromJSON,
+  tn as ResourceTypeFromJSONTyped,
+  Ii as ResourceTypeToJSON,
+  Kt as ResponseError,
+  ft as SborDataFromJSON,
+  De as SborDataFromJSONTyped,
+  pt as SborDataToJSON,
+  Yt as SignatureFromJSON,
+  Zt as SignatureFromJSONTyped,
+  jt as SignatureToJSON,
+  ae as SignatureWithPublicKeyFromJSON,
+  ce as SignatureWithPublicKeyFromJSONTyped,
+  de as SignatureWithPublicKeyToJSON,
   Je as SignedTransactionIntentFromJSON,
   Re as SignedTransactionIntentFromJSONTyped,
-  we as SignedTransactionIntentToJSON,
-  fu as StateApi,
-  On as StateUpdatesFromJSON,
-  Nn as StateUpdatesFromJSONTyped,
-  Tn as StateUpdatesToJSON,
-  Oo as SubstateBaseFromJSON,
+  Pe as SignedTransactionIntentToJSON,
+  Fs as StateApi,
+  Nn as StateUpdatesFromJSON,
+  Tn as StateUpdatesFromJSONTyped,
+  wn as StateUpdatesToJSON,
+  Js as StatusApi,
+  xo as SubstateBaseFromJSON,
   zn as SubstateBaseFromJSONTyped,
-  No as SubstateBaseToJSON,
+  Eo as SubstateBaseToJSON,
   b as SubstateFromJSON,
-  Sn as SubstateFromJSONTyped,
+  hn as SubstateFromJSONTyped,
   x as SubstateIdFromJSON,
-  Ae as SubstateIdFromJSONTyped,
+  ve as SubstateIdFromJSONTyped,
   E as SubstateIdToJSON,
   g as SubstateToJSON,
-  ri as SubstateType,
+  fi as SubstateType,
   p as SubstateTypeFromJSON,
-  qe as SubstateTypeFromJSONTyped,
-  ii as SubstateTypeToJSON,
-  Fo as SystemSubstateAllOfFromJSON,
+  Ae as SubstateTypeFromJSONTyped,
+  pi as SubstateTypeToJSON,
+  Vo as SystemSubstateAllOfFromJSON,
   Bn as SystemSubstateAllOfFromJSONTyped,
-  Jo as SystemSubstateAllOfToJSON,
-  wi as SystemSubstateFromJSON,
-  Tt as SystemSubstateFromJSONTyped,
-  en as SystemSubstateToJSON,
-  Vr as TextApiResponse,
-  pu as TransactionApi,
-  be as TransactionHeaderFromJSON,
-  ge as TransactionHeaderFromJSONTyped,
-  Oe as TransactionHeaderToJSON,
-  wo as TransactionIdentifiersFromJSON,
-  Wn as TransactionIdentifiersFromJSONTyped,
-  Po as TransactionIdentifiersToJSON,
-  Ne as TransactionIntentFromJSON,
-  Te as TransactionIntentFromJSONTyped,
+  Co as SystemSubstateAllOfToJSON,
+  qi as SystemSubstateFromJSON,
+  wt as SystemSubstateFromJSONTyped,
+  nn as SystemSubstateToJSON,
+  Wr as TextApiResponse,
+  Rs as TransactionApi,
+  ge as TransactionHeaderFromJSON,
+  Oe as TransactionHeaderFromJSONTyped,
+  Ne as TransactionHeaderToJSON,
+  qo as TransactionIdentifiersFromJSON,
+  Hn as TransactionIdentifiersFromJSONTyped,
+  Ao as TransactionIdentifiersToJSON,
+  Te as TransactionIntentFromJSON,
+  we as TransactionIntentFromJSONTyped,
   Fe as TransactionIntentToJSON,
   Rn as TransactionReceiptFromJSON,
-  wn as TransactionReceiptFromJSONTyped,
-  Pn as TransactionReceiptToJSON,
-  qi as TransactionStatus,
+  Pn as TransactionReceiptFromJSONTyped,
+  kn as TransactionReceiptToJSON,
+  Bi as TransactionStatus,
   Fn as TransactionStatusFromJSON,
   Jn as TransactionStatusFromJSONTyped,
-  Ai as TransactionStatusToJSON,
-  hn as UpSubstateFromJSON,
-  bn as UpSubstateFromJSONTyped,
-  gn as UpSubstateToJSON,
-  xo as V0CommittedTransactionRequestFromJSON,
-  Hn as V0CommittedTransactionRequestFromJSONTyped,
-  Gn as V0CommittedTransactionRequestToJSON,
-  Ln as V0CommittedTransactionResponseFromJSON,
-  Qn as V0CommittedTransactionResponseFromJSONTyped,
-  Io as V0CommittedTransactionResponseToJSON,
-  Xn as V0StateComponentDescendentIdFromJSON,
-  Yn as V0StateComponentDescendentIdFromJSONTyped,
-  Zn as V0StateComponentDescendentIdToJSON,
-  Co as V0StateComponentRequestFromJSON,
-  jn as V0StateComponentRequestFromJSONTyped,
-  tr as V0StateComponentRequestToJSON,
-  er as V0StateComponentResponseFromJSON,
-  nr as V0StateComponentResponseFromJSONTyped,
-  Ao as V0StateComponentResponseToJSON,
-  rr as V0StateEpochResponseFromJSON,
-  ir as V0StateEpochResponseFromJSONTyped,
-  $o as V0StateEpochResponseToJSON,
-  Mo as V0StateNonFungibleRequestFromJSON,
-  or as V0StateNonFungibleRequestFromJSONTyped,
-  ur as V0StateNonFungibleRequestToJSON,
-  sr as V0StateNonFungibleResponseFromJSON,
-  ar as V0StateNonFungibleResponseFromJSONTyped,
-  zo as V0StateNonFungibleResponseToJSON,
-  Wo as V0StatePackageRequestFromJSON,
-  cr as V0StatePackageRequestFromJSONTyped,
-  dr as V0StatePackageRequestToJSON,
-  _r as V0StatePackageResponseFromJSON,
-  fr as V0StatePackageResponseFromJSONTyped,
-  Go as V0StatePackageResponseToJSON,
-  Qo as V0StateResourceRequestFromJSON,
-  pr as V0StateResourceRequestFromJSONTyped,
-  lr as V0StateResourceRequestToJSON,
-  yr as V0StateResourceResponseFromJSON,
-  mr as V0StateResourceResponseFromJSONTyped,
-  Yo as V0StateResourceResponseToJSON,
-  Sr as V0TransactionPayloadStatusFromJSON,
-  hr as V0TransactionPayloadStatusFromJSONTyped,
-  Zo as V0TransactionPayloadStatusStatusEnum,
-  br as V0TransactionPayloadStatusToJSON,
-  eu as V0TransactionStatusRequestFromJSON,
-  gr as V0TransactionStatusRequestFromJSONTyped,
-  Or as V0TransactionStatusRequestToJSON,
-  Nr as V0TransactionStatusResponseFromJSON,
-  Tr as V0TransactionStatusResponseFromJSONTyped,
-  nu as V0TransactionStatusResponseIntentStatusEnum,
-  iu as V0TransactionStatusResponseToJSON,
-  uu as V0TransactionSubmitRequestFromJSON,
-  Fr as V0TransactionSubmitRequestFromJSONTyped,
-  Jr as V0TransactionSubmitRequestToJSON,
-  Rr as V0TransactionSubmitResponseFromJSON,
-  wr as V0TransactionSubmitResponseFromJSONTyped,
-  au as V0TransactionSubmitResponseToJSON,
-  du as VaultSubstateAllOfFromJSON,
-  Pr as VaultSubstateAllOfFromJSONTyped,
-  _u as VaultSubstateAllOfToJSON,
-  Di as VaultSubstateFromJSON,
-  Pt as VaultSubstateFromJSONTyped,
-  _n as VaultSubstateToJSON,
-  Ir as VoidApiResponse,
-  Er as canConsumeForm,
+  Hi as TransactionStatusToJSON,
+  bn as UpSubstateFromJSON,
+  gn as UpSubstateFromJSONTyped,
+  On as UpSubstateToJSON,
+  $o as V0CommittedTransactionRequestFromJSON,
+  Gn as V0CommittedTransactionRequestFromJSONTyped,
+  Ln as V0CommittedTransactionRequestToJSON,
+  Qn as V0CommittedTransactionResponseFromJSON,
+  Xn as V0CommittedTransactionResponseFromJSONTyped,
+  Mo as V0CommittedTransactionResponseToJSON,
+  rr as V0NetworkConfigurationResponseFromJSON,
+  ir as V0NetworkConfigurationResponseFromJSONTyped,
+  Bo as V0NetworkConfigurationResponseToJSON,
+  Yn as V0NetworkConfigurationResponseVersionFromJSON,
+  Zn as V0NetworkConfigurationResponseVersionFromJSONTyped,
+  jn as V0NetworkConfigurationResponseVersionToJSON,
+  tr as V0NetworkConfigurationResponseWellKnownAddressesFromJSON,
+  er as V0NetworkConfigurationResponseWellKnownAddressesFromJSONTyped,
+  nr as V0NetworkConfigurationResponseWellKnownAddressesToJSON,
+  or as V0StateComponentDescendentIdFromJSON,
+  sr as V0StateComponentDescendentIdFromJSONTyped,
+  ur as V0StateComponentDescendentIdToJSON,
+  Lo as V0StateComponentRequestFromJSON,
+  ar as V0StateComponentRequestFromJSONTyped,
+  cr as V0StateComponentRequestToJSON,
+  dr as V0StateComponentResponseFromJSON,
+  _r as V0StateComponentResponseFromJSONTyped,
+  Xo as V0StateComponentResponseToJSON,
+  fr as V0StateEpochResponseFromJSON,
+  pr as V0StateEpochResponseFromJSONTyped,
+  Zo as V0StateEpochResponseToJSON,
+  ts as V0StateNonFungibleRequestFromJSON,
+  lr as V0StateNonFungibleRequestFromJSONTyped,
+  yr as V0StateNonFungibleRequestToJSON,
+  mr as V0StateNonFungibleResponseFromJSON,
+  Sr as V0StateNonFungibleResponseFromJSONTyped,
+  ns as V0StateNonFungibleResponseToJSON,
+  is as V0StatePackageRequestFromJSON,
+  hr as V0StatePackageRequestFromJSONTyped,
+  br as V0StatePackageRequestToJSON,
+  gr as V0StatePackageResponseFromJSON,
+  Or as V0StatePackageResponseFromJSONTyped,
+  ss as V0StatePackageResponseToJSON,
+  as as V0StateResourceRequestFromJSON,
+  Nr as V0StateResourceRequestFromJSONTyped,
+  Tr as V0StateResourceRequestToJSON,
+  wr as V0StateResourceResponseFromJSON,
+  Fr as V0StateResourceResponseFromJSONTyped,
+  ds as V0StateResourceResponseToJSON,
+  Jr as V0TransactionPayloadStatusFromJSON,
+  Rr as V0TransactionPayloadStatusFromJSONTyped,
+  _s as V0TransactionPayloadStatusStatusEnum,
+  Pr as V0TransactionPayloadStatusToJSON,
+  ls as V0TransactionStatusRequestFromJSON,
+  kr as V0TransactionStatusRequestFromJSONTyped,
+  xr as V0TransactionStatusRequestToJSON,
+  Er as V0TransactionStatusResponseFromJSON,
+  Ir as V0TransactionStatusResponseFromJSONTyped,
+  ys as V0TransactionStatusResponseIntentStatusEnum,
+  Ss as V0TransactionStatusResponseToJSON,
+  bs as V0TransactionSubmitRequestFromJSON,
+  Vr as V0TransactionSubmitRequestFromJSONTyped,
+  Cr as V0TransactionSubmitRequestToJSON,
+  Dr as V0TransactionSubmitResponseFromJSON,
+  qr as V0TransactionSubmitResponseFromJSONTyped,
+  Os as V0TransactionSubmitResponseToJSON,
+  Ts as VaultSubstateAllOfFromJSON,
+  Ar as VaultSubstateAllOfFromJSONTyped,
+  ws as VaultSubstateAllOfToJSON,
+  Ui as VaultSubstateFromJSON,
+  kt as VaultSubstateFromJSONTyped,
+  fn as VaultSubstateToJSON,
+  Mr as VoidApiResponse,
+  Kr as canConsumeForm,
   _ as exists,
-  Cr as instanceOfCommittedStateIdentifier,
-  $i as instanceOfCommittedTransaction,
-  ai as instanceOfComponentInfoSubstate,
-  Ki as instanceOfComponentInfoSubstateAllOf,
-  fi as instanceOfComponentStateSubstate,
-  zi as instanceOfComponentStateSubstateAllOf,
-  _i as instanceOfDataStruct,
-  ui as instanceOfDownSubstate,
-  Gr as instanceOfEcdsaSecp256k1PublicKey,
-  Kr as instanceOfEcdsaSecp256k1Signature,
-  Ur as instanceOfEcdsaSecp256k1SignatureWithPublicKey,
-  Br as instanceOfEddsaEd25519PublicKey,
-  Mr as instanceOfEddsaEd25519Signature,
-  Wr as instanceOfEddsaEd25519SignatureWithPublicKey,
-  di as instanceOfEntityId,
-  Hi as instanceOfErrorResponse,
-  jr as instanceOfFeeSummary,
-  Pi as instanceOfFungibleResourceAmount,
-  Qi as instanceOfFungibleResourceAmountAllOf,
-  si as instanceOfGlobalEntityId,
-  li as instanceOfKeyValueStoreEntrySubstate,
-  Zi as instanceOfKeyValueStoreEntrySubstateAllOf,
-  mi as instanceOfNonFungibleData,
-  xi as instanceOfNonFungibleResourceAmount,
-  eo as instanceOfNonFungibleResourceAmountAllOf,
-  Si as instanceOfNonFungibleSubstate,
-  io as instanceOfNonFungibleSubstateAllOf,
-  Zr as instanceOfNotarizedTransaction,
-  bi as instanceOfPackageSubstate,
-  so as instanceOfPackageSubstateAllOf,
-  _o as instanceOfResourceAmountBase,
-  lo as instanceOfResourceChange,
-  Fi as instanceOfResourceManagerSubstate,
-  So as instanceOfResourceManagerSubstateAllOf,
-  Oi as instanceOfResourceManagerSubstateAllOfMetadata,
-  ti as instanceOfSborData,
-  Yr as instanceOfSignedTransactionIntent,
-  Ci as instanceOfStateUpdates,
-  go as instanceOfSubstateBase,
-  oi as instanceOfSubstateId,
-  Ri as instanceOfSystemSubstate,
-  To as instanceOfSystemSubstateAllOf,
-  Qr as instanceOfTransactionHeader,
-  Ro as instanceOfTransactionIdentifiers,
-  Xr as instanceOfTransactionIntent,
-  vi as instanceOfTransactionReceipt,
-  Vi as instanceOfUpSubstate,
-  ko as instanceOfV0CommittedTransactionRequest,
-  Eo as instanceOfV0CommittedTransactionResponse,
-  Do as instanceOfV0StateComponentDescendentId,
-  Vo as instanceOfV0StateComponentRequest,
-  qo as instanceOfV0StateComponentResponse,
-  vo as instanceOfV0StateEpochResponse,
-  Ko as instanceOfV0StateNonFungibleRequest,
-  Uo as instanceOfV0StateNonFungibleResponse,
-  Bo as instanceOfV0StatePackageRequest,
-  Ho as instanceOfV0StatePackageResponse,
-  Lo as instanceOfV0StateResourceRequest,
-  Xo as instanceOfV0StateResourceResponse,
-  jo as instanceOfV0TransactionPayloadStatus,
-  tu as instanceOfV0TransactionStatusRequest,
-  ru as instanceOfV0TransactionStatusResponse,
-  ou as instanceOfV0TransactionSubmitRequest,
-  su as instanceOfV0TransactionSubmitResponse,
-  Ii as instanceOfVaultSubstate,
-  cu as instanceOfVaultSubstateAllOf,
-  xr as mapValues,
-  tt as querystring
+  zr as instanceOfCommittedStateIdentifier,
+  Li as instanceOfCommittedTransaction,
+  Si as instanceOfComponentInfoSubstate,
+  Qi as instanceOfComponentInfoSubstateAllOf,
+  Oi as instanceOfComponentStateSubstate,
+  Zi as instanceOfComponentStateSubstateAllOf,
+  gi as instanceOfDataStruct,
+  yi as instanceOfDownSubstate,
+  ni as instanceOfEcdsaSecp256k1PublicKey,
+  Qr as instanceOfEcdsaSecp256k1Signature,
+  Yr as instanceOfEcdsaSecp256k1SignatureWithPublicKey,
+  jr as instanceOfEddsaEd25519PublicKey,
+  Xr as instanceOfEddsaEd25519Signature,
+  ti as instanceOfEddsaEd25519SignatureWithPublicKey,
+  bi as instanceOfEntityId,
+  eo as instanceOfErrorResponse,
+  ai as instanceOfFeeSummary,
+  Ai as instanceOfFungibleResourceAmount,
+  io as instanceOfFungibleResourceAmountAllOf,
+  mi as instanceOfGlobalEntityId,
+  Ti as instanceOfKeyValueStoreEntrySubstate,
+  uo as instanceOfKeyValueStoreEntrySubstateAllOf,
+  Fi as instanceOfNonFungibleData,
+  $i as instanceOfNonFungibleResourceAmount,
+  _o as instanceOfNonFungibleResourceAmountAllOf,
+  Ji as instanceOfNonFungibleSubstate,
+  lo as instanceOfNonFungibleSubstateAllOf,
+  ui as instanceOfNotarizedTransaction,
+  Pi as instanceOfPackageSubstate,
+  So as instanceOfPackageSubstateAllOf,
+  go as instanceOfResourceAmountBase,
+  To as instanceOfResourceChange,
+  Vi as instanceOfResourceManagerSubstate,
+  Jo as instanceOfResourceManagerSubstateAllOf,
+  xi as instanceOfResourceManagerSubstateAllOfMetadata,
+  ci as instanceOfSborData,
+  si as instanceOfSignedTransactionIntent,
+  zi as instanceOfStateUpdates,
+  ko as instanceOfSubstateBase,
+  li as instanceOfSubstateId,
+  Di as instanceOfSystemSubstate,
+  Io as instanceOfSystemSubstateAllOf,
+  ii as instanceOfTransactionHeader,
+  Do as instanceOfTransactionIdentifiers,
+  oi as instanceOfTransactionIntent,
+  Gi as instanceOfTransactionReceipt,
+  Wi as instanceOfUpSubstate,
+  vo as instanceOfV0CommittedTransactionRequest,
+  Ko as instanceOfV0CommittedTransactionResponse,
+  zo as instanceOfV0NetworkConfigurationResponse,
+  Uo as instanceOfV0NetworkConfigurationResponseVersion,
+  Wo as instanceOfV0NetworkConfigurationResponseWellKnownAddresses,
+  Ho as instanceOfV0StateComponentDescendentId,
+  Go as instanceOfV0StateComponentRequest,
+  Qo as instanceOfV0StateComponentResponse,
+  Yo as instanceOfV0StateEpochResponse,
+  jo as instanceOfV0StateNonFungibleRequest,
+  es as instanceOfV0StateNonFungibleResponse,
+  rs as instanceOfV0StatePackageRequest,
+  os as instanceOfV0StatePackageResponse,
+  us as instanceOfV0StateResourceRequest,
+  cs as instanceOfV0StateResourceResponse,
+  fs as instanceOfV0TransactionPayloadStatus,
+  ps as instanceOfV0TransactionStatusRequest,
+  ms as instanceOfV0TransactionStatusResponse,
+  hs as instanceOfV0TransactionSubmitRequest,
+  gs as instanceOfV0TransactionSubmitResponse,
+  Mi as instanceOfVaultSubstate,
+  Ns as instanceOfVaultSubstateAllOf,
+  $r as mapValues,
+  et as querystring
 };
