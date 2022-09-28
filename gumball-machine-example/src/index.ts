@@ -1,4 +1,4 @@
-import Sdk from '@radixdlt/alphanet-walletextension-sdk';
+import Sdk, { ManifestBuilder } from '@radixdlt/alphanet-walletextension-sdk';
 import { StateApi, TransactionApi } from '@radixdlt/alphanet-gateway-api-v0-sdk'
 
 // Initialize the SDK
@@ -31,13 +31,16 @@ document.getElementById('fetchAccountAddress').onclick = async function () {
 document.getElementById('instantiateComponent').onclick = async function () {
   let packageAddress = document.getElementById("packageAddress").value;
   
+  let manifest = new ManifestBuilder()
+    .callMethod(accountAddress, "lock_fee", ['Decimal("100")'])
+    .callFunction(packageAddress, "GumballMachine", "instantiate_gumball_machine", ['Decimal("10")'])
+    .build()
+    .toString();
+
   // Send manifest to extension for signing
   const hash = await sdk
-  .sendTransaction(
-    `CALL_METHOD ComponentAddress("${accountAddress}") "lock_fee" Decimal("100");
-    CALL_FUNCTION PackageAddress("${packageAddress}") "GumballMachine" "instantiate_gumball_machine" Decimal("10");`
-    )
-  .map((response) => response.transactionHash)
+    .sendTransaction(manifest)
+    .map((response) => response.transactionHash)
 
   if (hash.isErr()) throw hash.error
 
@@ -54,16 +57,20 @@ document.getElementById('instantiateComponent').onclick = async function () {
 }
 
 document.getElementById('buyGumball').onclick = async function () {
+
+  let manifest = new ManifestBuilder()
+    .callMethod(accountAddress, "lock_fee", ['Decimal("100")'])
+    .withdrawFromAccountByAmount(accountAddress, 10, "resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9")
+    .takeFromWorktopByAmount(10, "resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9", "bucket1")
+    .callMethod(componentAddress, "buy_gumball", ['Bucket("bucket1")'])
+    .callMethod(accountAddress, "deposit_batch", ['Expression("ENTIRE_WORKTOP")'])
+    .build()
+    .toString();
+
   // Send manifest to extension for signing
   const hash = await sdk
-  .sendTransaction(
-    `CALL_METHOD ComponentAddress("${accountAddress}") "lock_fee" Decimal("100");
-    CALL_METHOD ComponentAddress("${accountAddress}") "withdraw_by_amount" Decimal("10") ResourceAddress("resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9");
-    TAKE_FROM_WORKTOP_BY_AMOUNT Decimal("10") ResourceAddress("resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9") Bucket("bucket1");
-    CALL_METHOD ComponentAddress("${componentAddress}") "buy_gumball" Bucket("bucket1");
-    CALL_METHOD ComponentAddress("${accountAddress}") "deposit_batch" Expression("ENTIRE_WORKTOP");`
-  )
-  .map((response) => response.transactionHash)
+    .sendTransaction(manifest)
+    .map((response) => response.transactionHash)
 
   if (hash.isErr()) throw hash.error
 
