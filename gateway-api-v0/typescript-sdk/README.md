@@ -8,7 +8,7 @@ Behind the scenes, this library uses the fetch API.
 
 If in an environment where this is not available, a polyfill must be used.
 
-An example using this with node is provided in [../examples/node-16](../examples/node-16).
+An example using this with node is provided in [../examples/node-16/src/index.ts](../examples/node-16/src/index.ts).
 
 ```typescript
 import "./node-fetch-polyfill" // Polyfill for fetch required if running in node-js
