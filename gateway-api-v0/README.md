@@ -4,6 +4,8 @@ Alphanet is releasing with a v0 Babylon API - available at https://alphanet.radi
 
 This API is intended for integrating with Alphanet. The API surface is not intended to closely resemble the Babylon Gateway at mainnet launch. This will be coming for Betanet.
 
+An SDK for calling the API from Javascript is available on npm at: [@radixdlt/alphanet-gateway-api-v0-sdk](https://www.npmjs.com/package/@radixdlt/alphanet-gateway-api-v0-sdk)
+
 ## Changes from the PTE API
 
 * This API uses POST requests
