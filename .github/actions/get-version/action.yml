@@ -34,3 +34,4 @@ runs:
           fi
           echo "Tag $RELEASE_VERSION"
           echo "::set-output name=babylon_alphanet_tag::$RELEASE_VERSION"
+      shell: bash
