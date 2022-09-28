@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./alphanet-walletextension-${{ github.event.release.tag_name }}.zip
+          asset_path: ./alphanet-walletextension/alphanet-walletextension-${{ github.event.release.tag_name }}.zip
           asset_name: alphanet-walletextension-${{ github.event.release.tag_name }}.zip
           asset_content_type: application/zip
 
