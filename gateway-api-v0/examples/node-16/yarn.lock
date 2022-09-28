@@ -2,8 +2,10 @@
 # yarn lockfile v1
 
 
-"@radixdlt/alphanet-gateway-api-v0-sdk@../../typescript-sdk":
-  version "0.1.1"
+"@radixdlt/alphanet-gateway-api-v0-sdk@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-gateway-api-v0-sdk/-/alphanet-gateway-api-v0-sdk-0.1.2.tgz#ad69f8203f719c38294266dd41e02c769f4d3336"
+  integrity sha512-0zJ0giAK2hR7WIZPvFE9orcpydsjiTh0PH/N6v5IFVN8LhBa2fm8KAqHlPU4WCmjIkMRSsP2RdIuzBT7luKRvw==
   dependencies:
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
