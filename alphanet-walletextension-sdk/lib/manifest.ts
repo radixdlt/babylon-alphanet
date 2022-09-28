@@ -1,5 +1,3 @@
-import { Buffer } from 'buffer';
-
 export class Manifest {
     instructions: string[];
 
