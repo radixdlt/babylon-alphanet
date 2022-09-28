@@ -21,7 +21,7 @@ runs:
   using: "composite"
   steps:
     - id: get_version
-      run:
+      run: |
           GH_EVENT_NAME="${{ inputs.github_event }}"
           IS_PRERELEASE="${{ inputs.is_prerelease }}"
           COMMIT_SHA="${{ inputs.commit_sha }}"
