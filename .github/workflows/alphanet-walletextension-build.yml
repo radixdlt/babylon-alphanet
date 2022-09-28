@@ -58,9 +58,7 @@ jobs:
         if: github.event_name == 'release'
         run: |
            TAG_NAME="${{ github.event.release.tag_name }}"
-           tar cvf alphanet-walletextension-$TAG_NAME.zip dist/
-           ls -l
-           pwd
+           zip -9 -y -r -q alphanet-walletextension-$TAG_NAME.zip dist/
 
       - name: Upload distribution zip
         if: github.event_name == 'release'
