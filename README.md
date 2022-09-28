@@ -16,6 +16,6 @@ Alphanet Browser Extension is a proof-of-concept Chrome extension thats signs tr
 
 You can download the prebuilt binaries from the latest releases.
 
-# API Specification
-The specification of the Alphanet API service can be found [here](https://github.com/radixdlt/babylon-alphanet/blob/main/gateway-api-v0/gateway-api-v0-schema.yaml).
+# Alphanet Gateway API v0
 
+Docs on the Alphanet API are in the [gateway-api-v0](./gateway-api-v0) folder.
