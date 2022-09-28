@@ -27,7 +27,7 @@ runs:
           COMMIT_SHA="${{ inputs.commit_sha }}"
           if [[ $IS_PRERELEASE ]];then
             RELEASE_VERSION="rc-${{ inputs.release_tag }}"
-          else if [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]];then
+          elif [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]];then
             RELEASE_VERSION="${{ inputs.release_tag }}"
           else
             RELEASE_VERSION="${{ github.sha }}"
