@@ -4,8 +4,11 @@ on:
   push:
     paths:
       - "alphanet-walletextension/**"
+    branches:
+      - DO-886
   workflow_dispatch:
-
+  release:
+    types: [published]
 jobs:
   test_and_lint:
     runs-on: ubuntu-latest
@@ -29,7 +32,30 @@ jobs:
       - name: Build extension
         run: yarn build
 
+      - id: get_version
+        name: Get babylon alphanet version
+        uses: ./.github/actions/get-version
+        with:
+          github_event: ${{ github.event_name }}
+          is_prerelease: ${{ github.event.release.prerelease }}
+          commit_sha: ${{ github.sha }}
+          release_tag: ${{ github.event.release.tag_name }}
       - uses: actions/upload-artifact@v3
         with:
-          name: alphanet-walletextension.${{ github.sha }}
+          name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_tag }}
           path: alphanet-walletextension/dist
+
+      # - name: Setup tags for docker image
+      #   id: setup_tags
+      #   run: |
+      #     GH_EVENT_NAME=${{ github.event_name }} 
+      #     if [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]] && [[ github.event.release.prerelease ]];then
+      #       RELEASE_VERSION="rc-${{ github.event.release.tag_name }}"
+      #       echo "::set-output name=babylon_alphanet_tag::rc-$RELEASE_VERSION"
+      #     else if [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]];then
+      #       RELEASE_VERSION="${{ github.event.release.tag_name }}"
+      #     else
+      #       RELEASE_VERSION="${{ github.sha }}"
+      #     fi
+      #     echo "Version: $RELEASE_VERSION"
+      #     echo "::set-output name=babylon_alphanet_tag::$RELEASE_VERSION"
