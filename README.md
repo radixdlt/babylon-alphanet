@@ -9,13 +9,11 @@ As of September 28th, 2022, the Radix Alphanet is now live. It gives you the fir
 
 Now that the Radix Alphanet is live, the PTE has been shut down. As a result, to get up and running you will have to download and install the new wallet extension. 
 
-
 # Browser Extension
 Alphanet Browser Extension is a proof-of-concept Chrome extension thats signs transactions using a local key pair. It is important to note that this Alphanet wallet has nothing to do with the DeFi wallet we are currently working on and that is going to be released for Babylon. This extension is temporary and that is why it does not look so polished. If you were used to the previous browser wallet version, you might now notice some nice new features that we are going to let you explore (like being able to remove all past transactions in a single click)!
 
-
-You can download the prebuilt binaries from the latest releases.
+Instructions on how to install the browser extension can be found [here](https://docs.radixdlt.com/main/scrypto/alphanet/wallet-extension.html)
 
 # Alphanet Gateway API v0
 
-Docs on the Alphanet API are in the [gateway-api-v0](./gateway-api-v0) folder.
+An end-to-end tutorial to work with the Alphanet SDKs can be found in the [Gumball Machine Example](./gumball-machine-example/) folder.
