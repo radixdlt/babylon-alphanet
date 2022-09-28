@@ -1,6 +1,6 @@
 # Alphanet Gateway v0 SDK
 
-This SDK is a thin wrapper around the Babylon V0 Gateway API, detailed in [the Open API schema](https://github.com/radixdlt/babylon-alphanet/blob/main/gateway-api-v0/gateway-api-v0-schema.yaml).
+This SDK is a thin wrapper around the Babylon V0 Gateway API, detailed in [the Open API schema](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/babylon-alphanet/main/gateway-api-v0/gateway-api-v0-schema.yaml).
 
 ## Usage
 
@@ -8,7 +8,7 @@ Behind the scenes, this library uses the fetch API.
 
 If in an environment where this is not available, a polyfill must be used.
 
-An example using this with node is provided in [here in the github repo](https://github.com/radixdlt/babylon-alphanet/blob/main/gateway-api-v0/examples/node-16/src/index.ts).
+An example using this with node is provided [here in the github repo](https://github.com/radixdlt/babylon-alphanet/blob/main/gateway-api-v0/examples/node-16/src/index.ts).
 
 ```typescript
 import "./node-fetch-polyfill" // Polyfill for fetch required if running in node-js
