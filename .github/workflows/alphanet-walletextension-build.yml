@@ -42,7 +42,7 @@ jobs:
           release_tag: ${{ github.event.release.tag_name }}
       - uses: actions/upload-artifact@v3
         with:
-          name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_tag }}
+          name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}
           path: alphanet-walletextension/dist
 
       # - name: Setup tags for docker image
