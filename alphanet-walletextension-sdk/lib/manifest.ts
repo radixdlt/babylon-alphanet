@@ -251,24 +251,12 @@ export class ManifestBuilder {
     }
 
     /**
-     * Calls a method on a component with all resources on or off worktop.
-     * 
-     * @param componentAddress  The component address
-     * @param methodName The method name
-     * @returns 
-     */
-    callMethodWithAllResources(componentAddress: string, methodName: string): ManifestBuilder {
-        this.instructions.push('CALL_METHOD_WITH_ALL_RESOURCES ComponentAddress("' + componentAddress + '") "' + methodName + '";');
-        return this;
-    }
-
-    /**
      * Publishes a package.
-     * @param code The package wasm code
+     * @param code_hash The package wasm code hash
+     * @param abi_hash The package ABI hash
      */
-    publishPackage(code: Uint8Array): ManifestBuilder {
-        var hex = Buffer.from(code).toString('hex');
-        this.instructions.push('PUBLISH_PACKAGE Bytes("' + hex + '");');
+    publishPackage(code_hash: string, abi_hash: string): ManifestBuilder {
+        this.instructions.push('PUBLISH_PACKAGE Blob("' + code_hash + '")  Blob("' + abi_hash + '");');
         return this;
     }
 
@@ -348,19 +336,6 @@ export class ManifestBuilder {
     createProofFromAccountByIds(accountAddress: String, nonFungibleIds: string[], resourceAddress: string): ManifestBuilder {
         this.instructions.push('CALL_METHOD ComponentAddress("' + accountAddress + '") "create_proof_by_ids" ' + this.formatNonFungibleIds(nonFungibleIds) + ' ResourceAddress("' + resourceAddress + '");')
         return this;
-    }
-
-    /**
-     * Creates a new account.
-     * @param publicKey The public key 
-     * @returns 
-     */
-    newAccount(publicKey: String): ManifestBuilder {
-        const auth = 'Enum("Protected", Enum("ProofRule", Enum("Require", Enum("StaticNonFungible", NonFungibleAddress("000000000000000000000000000000000000000000000000000002300721000000' + publicKey + '")))))';
-
-        return this.callMethod('system_sim1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs9fh54n', 'free_xrd', [])
-            .takeFromWorktop('resource_sim1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqu57yag', 'xrd')
-            .callFunction('package_sim1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpsuluv44', 'Account', 'new_with_resource', [auth, 'Bucket("xrd")']);
     }
 
     /**
