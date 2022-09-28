@@ -57,7 +57,7 @@ jobs:
       - name: Zip the dist folder
         if: github.event_name == 'release'
         run: |
-           tar cvf alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip dist/
+           tar cvf alphanet-walletextension-${{ github.event.tag_name }}.zip dist/
            ls -l
            pwd
 
@@ -68,8 +68,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip
-          asset_name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip
+          asset_path: ./alphanet-walletextension-${{ github.event.tag_name }}.zip
+          asset_name: alphanet-walletextension-${{ github.event.tag_name }}.zip
           asset_content_type: application/zip
 
       # - name: Setup tags for docker image
