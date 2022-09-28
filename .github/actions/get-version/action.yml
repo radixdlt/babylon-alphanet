@@ -25,9 +25,9 @@ runs:
           GH_EVENT_NAME="${{ inputs.github_event }}"
           IS_PRERELEASE="${{ inputs.is_prerelease }}"
           COMMIT_SHA="${{ inputs.commit_sha }}"
-          if [[ ! -z $IS_PRERELEASE ]]; then
+          if [[ ! -z $IS_PRERELEASE ]] ;then
             RELEASE_VERSION="rc-${{ inputs.release_tag }}"
-          elif [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]]; then
+          elif [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]] ;then
             RELEASE_VERSION="${{ inputs.release_tag }}"
           else
             RELEASE_VERSION="${{ github.sha }}"
