@@ -37,6 +37,7 @@ jobs:
           is_prerelease: ${{ github.event.release.prerelease }}
           commit_sha: ${{ github.sha }}
           release_tag: ${{ github.event.release.tag_name }}
+
       - uses: actions/upload-artifact@v3
         with:
           name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}
@@ -54,8 +55,7 @@ jobs:
       - name: Zip the dist folder
         if: github.event_name == 'release'
         run: |
-           TAG_NAME="${{ github.event.release.tag_name }}"
-           tar cvf alphanet-walletextension-$TAG_NAME.zip dist/
+           tar cvf alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip dist/
            ls -l
            pwd
 
@@ -66,21 +66,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./alphanet-walletextension/alphanet-walletextension-${{ github.event.release.tag_name }}.zip
-          asset_name: alphanet-walletextension-${{ github.event.release.tag_name }}.zip
+          asset_path: ./alphanet-walletextension/alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip
+          asset_name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip
           asset_content_type: application/zip
-
-      # - name: Setup tags for docker image
-      #   id: setup_tags
-      #   run: |
-      #     GH_EVENT_NAME=${{ github.event_name }} 
-      #     if [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]] && [[ github.event.release.prerelease ]];then
-      #       RELEASE_VERSION="rc-${{ github.event.release.tag_name }}"
-      #       echo "::set-output name=babylon_alphanet_tag::rc-$RELEASE_VERSION"
-      #     else if [[ ! -z $GH_EVENT_NAME ]] && [[ "$GH_EVENT_NAME" == "release" ]];then
-      #       RELEASE_VERSION="${{ github.event.release.tag_name }}"
-      #     else
-      #       RELEASE_VERSION="${{ github.sha }}"
-      #     fi
-      #     echo "Version: $RELEASE_VERSION"
-      #     echo "::set-output name=babylon_alphanet_tag::$RELEASE_VERSION"
