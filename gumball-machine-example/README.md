@@ -20,7 +20,7 @@ This example is meant to guide you through building, deploying and using the [Gu
 6. The deployed package address should get displayed. **You will need it for the next step**.
 
 ## Interacting with our package
-1. In a terminal go back to the root of this project (alphanet-frontend-example)
+1. In a terminal go back to the root of this project (gumball-machine-example)
 2. Install the npm dependencies: `npm install`
 3. Start the local server with `npm start`
 4. Open up your browser at the provided url if it doesn't open automatically.
