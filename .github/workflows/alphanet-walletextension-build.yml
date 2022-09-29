@@ -55,9 +55,7 @@ jobs:
       - name: Zip the dist folder
         if: github.event_name == 'release'
         run: |
-           tar cvf alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip dist/
-           ls -l
-           pwd
+           zip -9 -y -r -q alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}.zip dist/
 
       - name: Upload distribution zip
         if: github.event_name == 'release'
