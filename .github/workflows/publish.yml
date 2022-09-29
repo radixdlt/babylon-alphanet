@@ -4,7 +4,7 @@ on:
   release:
     types: [published]
 jobs:
-  publish-npmjs:
+  publish-wallet-extension-sdk-npmjs:
     runs-on: ubuntu-latest
     defaults:
       run:
