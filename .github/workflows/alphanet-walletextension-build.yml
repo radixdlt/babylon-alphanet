@@ -4,9 +4,6 @@ on:
   push:
     paths:
       - "alphanet-walletextension/**"
-    branches:
-      - DO-886
-  workflow_dispatch:
   release:
     types: [published]
 jobs:

@@ -16,7 +16,7 @@ inputs:
 outputs:
   babylon_alphanet_version:
     description: "Babylon Alphanet version"
-    value: ${{ steps.get_release.outputs.babylon_alphanet_version }}
+    value: ${{ steps.get_version.outputs.babylon_alphanet_version }}
 runs:
   using: "composite"
   steps:
