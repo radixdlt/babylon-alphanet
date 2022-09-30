@@ -1,6 +1,10 @@
 # The Gumball Machine on Alphanet
 This example is meant to guide you through building, deploying and using the [Gumball Machine Scrypto example](https://github.com/radixdlt/scrypto-examples/tree/main/core/gumball-machine) using the [Alphanet Javascript SDK](https://docs.radixdlt.com/main/scrypto/alphanet/javascript-sdk.html).
 
+## Prefer to watch a video tutorial?
+DevPath released a video where he goes through the Alphanet documentation and shows how to run this tutorial.
+[![DevPath going through this tutorial](https://img.youtube.com/vi/qfRCQ2YsLMM/0.jpg)](https://www.youtube.com/watch?v=qfRCQ2YsLMM)
+
 ## Pre-requisites
 1. Node >= 12.17.0
 2. The Alphanet wallet installed. Instructions [here](https://docs.radixdlt.com/main/scrypto/alphanet/wallet-extension.html)
