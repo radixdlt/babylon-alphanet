@@ -337,6 +337,29 @@ export class ManifestBuilder {
     }
 
     /**
+     * Burns a bucket
+     * 
+     * @param bucketName The name of the bucket to burn
+     * @returns 
+     */
+    burnBucket(bucketName: string): ManifestBuilder {
+        this.instructions.push(`BURN_BUCKET Bucket("${bucketName}");`);
+        return this;
+    }
+
+    /**
+     * Mints additional fungible token
+     * 
+     * @param resourceAddress The resource address of the fungible resource
+     * @param amount The amount to mint
+     * @returns 
+     */
+    mintFungible(resourceAddress: string, amount: number): ManifestBuilder {
+        this.instructions.push(`MINT_FUNGIBLE ResourceAddress("${resourceAddress}") Decimal("${amount}");`);
+        return this;
+    }
+
+    /**
      * Builds a transaction manifest.
      * 
      * @returns a transaction manifest
