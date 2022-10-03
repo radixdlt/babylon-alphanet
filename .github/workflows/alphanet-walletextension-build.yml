@@ -20,9 +20,6 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: Install dependencies
-        run: yarn add ./radixdlt-transaction-library-v0.5.0.tgz
-
       - name: Test
         run: yarn test
 
