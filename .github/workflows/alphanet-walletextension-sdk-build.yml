@@ -4,7 +4,8 @@ on:
   push:
     paths:
       - "alphanet-walletextension-sdk/**"
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   test_and_lint:
@@ -35,7 +36,15 @@ jobs:
       - name: Prepare artifact
         run: rm -rf node_modules e2e lib sandbox
 
+      - id: get_version
+        name: Get babylon alphanet version
+        uses: ./.github/actions/get-version
+        with:
+          github_event: ${{ github.event_name }}
+          commit_sha: ${{ github.sha }}
+          release_tag: ${{ github.event.release.tag_name }}
+
       - uses: actions/upload-artifact@v3
         with:
-          name: alphanet-walletextension-sdk.${{ github.sha }}
+          name: alphanet-walletextension-sdk-${{ steps.get_version.outputs.babylon_alphanet_version }}
           path: alphanet-walletextension-sdk
