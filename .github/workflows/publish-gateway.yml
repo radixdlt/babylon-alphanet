@@ -30,14 +30,13 @@ jobs:
         uses: ./.github/actions/get-version
         with:
           github_event: ${{ github.event_name }}
-          is_prerelease: ${{ github.event.release.prerelease }}
           commit_sha: ${{ github.sha }}
           release_tag: ${{ github.event.release.tag_name }}
 
       - name: Update package.json version
         uses: jossef/action-set-json-field@v2
         with:
-          file: package.json
+          file: ./gateway-api-v0/typescript-sdk/package.json
           field: version
           value: ${{ steps.get_version.outputs.babylon_alphanet_version }}
 
