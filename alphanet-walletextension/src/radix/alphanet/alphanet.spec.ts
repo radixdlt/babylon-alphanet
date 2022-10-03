@@ -50,6 +50,7 @@ describe("alphanet sdk", () => {
 
     it("should deploy a package, instantiate a component and call a method", async () => {
       console.log("Trying to publish package...");
+
       const result = await alphanetSdk()
         .submitTransaction(
           privateKeyHex,
