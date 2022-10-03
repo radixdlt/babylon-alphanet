@@ -6,7 +6,7 @@
     "@emotion/styled": "^11.10.0",
     "@mui/icons-material": "^5.10.2",
     "@mui/material": "^5.10.2",
-    "@radixdlt/transaction-library": "./radixdlt-transaction-library-v0.5.1.tgz",
+    "@radixdlt/transaction-library": "./radixdlt-transaction-library-v0.6.0.tgz",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "neverthrow": "^4.3.1",
