@@ -1730,9 +1730,9 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@radixdlt/transaction-library@./radixdlt-transaction-library-v0.5.0.tgz":
-  version "0.5.0"
-  resolved "./radixdlt-transaction-library-v0.5.0.tgz#f93d32d9f90dcec6ee9f1e4a7a9a4b00d5ff6007"
+"@radixdlt/transaction-library@./radixdlt-transaction-library-v0.5.1.tgz":
+  version "0.5.1"
+  resolved "./radixdlt-transaction-library-v0.5.1.tgz#d49e3a7486aa8ec30b525a239b4ab14f3ce1c32d"
   dependencies:
     crypto-js "^4.1.1"
     secp256k1 "^4.0.3"
