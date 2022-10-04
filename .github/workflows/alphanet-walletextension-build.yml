@@ -21,7 +21,7 @@ jobs:
           node-version: "18.x"
 
       - name: Install dependencies
-        run: yarn add ./radixdlt-transaction-library-v0.5.0.tgz
+        run: yarn install --frozen-lockfile
 
       - name: Test
         run: yarn test

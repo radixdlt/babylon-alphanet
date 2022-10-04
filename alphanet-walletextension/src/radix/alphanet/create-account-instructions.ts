@@ -27,19 +27,19 @@ export const createAccountInstructions = (
       [
         {
           type: ValueKind.Enum,
-          variant_name: "Protected",
+          variant: "Protected",
           fields: [
             {
               type: ValueKind.Enum,
-              variant_name: "ProofRule",
+              variant: "ProofRule",
               fields: [
                 {
                   type: ValueKind.Enum,
-                  variant_name: "Require",
+                  variant: "Require",
                   fields: [
                     {
                       type: ValueKind.Enum,
-                      variant_name: "StaticNonFungible",
+                      variant: "StaticNonFungible",
                       fields: [
                         {
                           type: ValueKind.NonFungibleAddress,

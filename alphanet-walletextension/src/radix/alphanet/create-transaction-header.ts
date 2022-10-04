@@ -23,7 +23,7 @@ export const createTransactionHeader = (
           public_key,
         },
         notary_as_signatory,
-        cost_unit_limit: 10_000_000,
+        cost_unit_limit: 100_000_000,
         tip_percentage: 0,
       }))
     )
