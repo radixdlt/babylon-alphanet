@@ -1,10 +1,14 @@
-name: Publish Wallet Extension SDK
+name: Alphanet Wallet Extension SDK build/publish
 
 on:
+  push:
+    paths:
+      - "alphanet-walletextension-sdk/**"
   release:
     types: [published]
+
 jobs:
-  publish-wallet-extension-sdk-npmjs:
+  build_alphanet_wallet_extension_sdk:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,11 +23,21 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: cat $NPM_CONFIG_USERCONFIG
-      - name: Publish alphanet-walletextension-sdk
-        run: |
-          yarn
-          yarn build
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Running lint
+        run: yarn lint
+
+      - name: Running tests
+        run: yarn test
+
+      - name: Build
+        run: yarn build
+
+      - name: Prepare artifact
+        run: rm -rf node_modules e2e lib sandbox
 
       - id: get_version
         name: Get babylon alphanet version
@@ -33,14 +47,22 @@ jobs:
           commit_sha: ${{ github.sha }}
           release_tag: ${{ github.event.release.tag_name }}
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: alphanet-walletextension-sdk-${{ steps.get_version.outputs.babylon_alphanet_version }}
+          path: alphanet-walletextension-sdk
+
       - name: Update package.json version
+        if: github.event_name == 'release'
         uses: jossef/action-set-json-field@v2
         with:
           file: ./alphanet-walletextension-sdk/package.json
           field: version
           value: ${{ steps.get_version.outputs.babylon_alphanet_version }}
 
-      - run: |
+      - name: Publish alphanet wallet extension sdk to npm
+        if: github.event_name == 'release'
+        run: |
           npm config set access public
           npm publish
         env:
