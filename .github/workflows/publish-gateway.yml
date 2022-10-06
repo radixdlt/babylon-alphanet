@@ -20,7 +20,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: cat $NPM_CONFIG_USERCONFIG
-      - name: Publish alphanet-gateway-sdk
+      - name: Build alphanet-gateway-sdk
         run: |
           yarn
           yarn build
