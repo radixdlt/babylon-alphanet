@@ -6,10 +6,10 @@
     "dist"
   ],
   "main": "./dist/alphanet-walletextension-sdk.umd.js",
-  "module": "./dist/alphanet-walletextension-sdk.es.js",
+  "module": "./dist/alphanet-walletextension-sdk.mjs",
   "exports": {
     ".": {
-      "import": "./dist/alphanet-walletextension-sdk.es.js",
+      "import": "./dist/alphanet-walletextension-sdk.mjs",
       "require": "./dist/alphanet-walletextension-sdk.umd.js"
     }
   },

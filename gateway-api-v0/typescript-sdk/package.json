@@ -7,10 +7,10 @@
     "dist"
   ],
   "main": "./dist/alphanet-gateway-api-v0-sdk.umd.js",
-  "module": "./dist/alphanet-gateway-api-v0-sdk.es.js",
+  "module": "./dist/alphanet-gateway-api-v0-sdk.mjs",
   "exports": {
     ".": {
-      "import": "./dist/alphanet-gateway-api-v0-sdk.es.js",
+      "import": "./dist/alphanet-gateway-api-v0-sdk.mjs",
       "require": "./dist/alphanet-gateway-api-v0-sdk.umd.js"
     }
   },
