@@ -1,15 +1,15 @@
 {
   "name": "@radixdlt/alphanet-walletextension-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "Apache-2.0",
   "files": [
     "dist"
   ],
   "main": "./dist/alphanet-walletextension-sdk.umd.js",
-  "module": "./dist/alphanet-walletextension-sdk.es.js",
+  "module": "./dist/alphanet-walletextension-sdk.mjs",
   "exports": {
     ".": {
-      "import": "./dist/alphanet-walletextension-sdk.es.js",
+      "import": "./dist/alphanet-walletextension-sdk.mjs",
       "require": "./dist/alphanet-walletextension-sdk.umd.js"
     }
   },

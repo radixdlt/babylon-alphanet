@@ -7,7 +7,6 @@ module.exports = defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'lib/alphanet-walletextension-sdk.ts'),
       name: 'alphanet-walletextension-sdk',
-      fileName: (format) => `alphanet-walletextension-sdk.${format}.js`,
     },
   },
 })
