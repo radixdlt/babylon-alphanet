@@ -24,6 +24,7 @@ import {
   Result,
   Set,
   String,
+  TransactionSpecError,
   Tuple,
   Type,
   U128,
@@ -111,5 +112,39 @@ describe('transation spec', () => {
     [Bucket(U32(35)), 'Bucket(35u32)'],
   ])('should correctly return %s as %s', (test, expected) => {
     expect(test).toBe(expected)
+  })
+
+  it.each([
+    [() => I8(128), 'Number range exceeded i8'],
+    [() => I8(-129), 'Number range exceeded i8'],
+    [() => I16(-32769), 'Number range exceeded i16'],
+    [() => I16(32769), 'Number range exceeded i16'],
+    [() => I32(-2147483649), 'Number range exceeded i32'],
+    [() => I32(2147483648), 'Number range exceeded i32'],
+    [() => I64('-9223372036854775809'), 'Number range exceeded i64'],
+    [() => I64('9223372036854775808'), 'Number range exceeded i64'],
+    [
+      () => I128('-170141183460469231731687303715884105729'),
+      'Number range exceeded i128',
+    ],
+    [
+      () => I128('170141183460469231731687303715884105728'),
+      'Number range exceeded i128',
+    ],
+    [() => U8(256), 'Number range exceeded u8'],
+    [() => U8(-1), 'Number range exceeded u8'],
+    [() => U16(-1), 'Number range exceeded u16'],
+    [() => U16(65536), 'Number range exceeded u16'],
+    [() => U32(-1), 'Number range exceeded u32'],
+    [() => U32(4294967296), 'Number range exceeded u32'],
+    [() => U64('-1'), 'Number range exceeded u64'],
+    [() => U64('18446744073709551616'), 'Number range exceeded u64'],
+    [() => U128('-1'), 'Number range exceeded u128'],
+    [
+      () => U128('340282366920938463463374607431768211456'),
+      'Number range exceeded u128',
+    ],
+  ])('should fail with TransactionSpecError', (test, expected) => {
+    expect(test).toThrowError(new TransactionSpecError(expected))
   })
 })
