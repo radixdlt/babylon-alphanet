@@ -30,7 +30,15 @@ export const pollTransactionStatus = (
           )
         ),
         timer(config.alphanet.pollTransactionStatusTimeout).pipe(
-          map(() => err(errorIdentity("Invalid transaction manifest")({})))
+          map(() =>
+            err(
+              errorIdentity(
+                `Transaction was not committed within ${
+                  config.alphanet.pollTransactionStatusTimeout / 1000
+                } seconds`
+              )({})
+            )
+          )
         )
       )
     ),
