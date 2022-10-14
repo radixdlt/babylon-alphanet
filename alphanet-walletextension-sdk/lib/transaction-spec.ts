@@ -65,28 +65,28 @@ export const Bool = (bool: boolean): `${boolean}` => {
   return `${bool}`
 }
 
-export const I8 = (num: number): `${number}i8` => {
+export const I8 = <T extends number>(num: T): `${T}i8` => {
   if (num < -128 || num > 127) {
     throw new TransactionSpecError('Number range exceeded i8')
   }
   return `${num}i8`
 }
 
-export const I16 = (num: number): `${number}i16` => {
+export const I16 = <T extends number>(num: T): `${T}i16` => {
   if (num < -32768 || num > 32767) {
     throw new TransactionSpecError('Number range exceeded i16')
   }
   return `${num}i16`
 }
 
-export const I32 = (num: number): `${number}i32` => {
+export const I32 = <T extends number>(num: T): `${T}i32` => {
   if (num < -2147483648 || num > 2147483647) {
     throw new TransactionSpecError('Number range exceeded i32')
   }
   return `${num}i32`
 }
 
-export const I64 = (num: string): `${string}i64` => {
+export const I64 = <T extends string>(num: T): `${T}i64` => {
   const bigNum = BigInt(num)
   if (
     bigNum < BigInt('-9223372036854775808') ||
@@ -97,7 +97,7 @@ export const I64 = (num: string): `${string}i64` => {
   return `${num}i64`
 }
 
-export const I128 = (num: string): `${string}i128` => {
+export const I128 = <T extends string>(num: T): `${T}i128` => {
   const bigNum = BigInt(num)
   if (
     bigNum < BigInt('-170141183460469231731687303715884105728') ||
@@ -108,28 +108,28 @@ export const I128 = (num: string): `${string}i128` => {
   return `${num}i128`
 }
 
-export const U8 = (num: number): `${number}u8` => {
+export const U8 = <T extends number>(num: T): `${T}u8` => {
   if (num < 0 || num > 255) {
     throw new TransactionSpecError('Number range exceeded u8')
   }
   return `${num}u8`
 }
 
-export const U16 = (num: number): `${number}u16` => {
+export const U16 = <T extends number>(num: T): `${T}u16` => {
   if (num < 0 || num > 65535) {
     throw new TransactionSpecError('Number range exceeded u16')
   }
   return `${num}u16`
 }
 
-export const U32 = (num: number): `${number}u32` => {
+export const U32 = <T extends number>(num: T): `${T}u32` => {
   if (num < 0 || num > 4294967295) {
     throw new TransactionSpecError('Number range exceeded u32')
   }
   return `${num}u32`
 }
 
-export const U64 = (num: string): `${string}u64` => {
+export const U64 = <T extends string>(num: T): `${T}u64` => {
   const bigNum = BigInt(num)
   if (bigNum < 0 || bigNum > BigInt('18446744073709551615')) {
     throw new TransactionSpecError('Number range exceeded u64')
@@ -137,7 +137,7 @@ export const U64 = (num: string): `${string}u64` => {
   return `${num}u64`
 }
 
-export const U128 = (num: string): `${string}u128` => {
+export const U128 = <T extends string>(num: T): `${T}u128` => {
   const bigNum = BigInt(num)
   if (
     bigNum < 0 ||
@@ -148,7 +148,7 @@ export const U128 = (num: string): `${string}u128` => {
   return `${num}u128`
 }
 
-export const String = (str: string): `"${string}"` => {
+export const String = <T extends string>(str: T): `"${T}"` => {
   return `"${str}"`
 }
 
@@ -159,25 +159,25 @@ export const Enum = (field: string, ...args: string[]): string => {
 }
 
 export const Option = {
-  Some: (value: string): `Some(${string})` => {
+  Some: <T extends string>(value: T): `Some(${T})` => {
     return `Some(${value})`
   },
   None: 'None',
 }
 
-export const Box = (value: string): `Box(${string})` => {
+export const Box = <T extends string>(value: T): `Box(${T})` => {
   return `Box(${value})`
 }
 
-export const Tuple = (...args: string[]): string => {
+export const Tuple = <T extends string[]>(...args: T): `Tuple(${string})` => {
   return `Tuple(${args.join(',')})`
 }
 
 export const Result = {
-  Ok: (value: string): `Ok(${string})` => {
+  Ok: <T extends string>(value: T): `Ok(${T})` => {
     return `Ok(${value})`
   },
-  Err: (value: string): `Err(${string})` => {
+  Err: <T extends string>(value: T): `Err(${T})` => {
     return `Err(${value})`
   },
 }
@@ -285,7 +285,9 @@ export const Bucket = (
   return `Bucket(${bucketId})`
 }
 
-export const Proof = (proofId: string): `Proof(${string})` => {
+export const Proof = (
+  proofId: string | `${string}u32`
+): `Proof(${string})` => {
   return `Proof(${proofId})`
 }
 
