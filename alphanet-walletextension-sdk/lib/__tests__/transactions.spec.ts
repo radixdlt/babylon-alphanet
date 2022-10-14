@@ -5,6 +5,7 @@ import {
   Bool,
   Box,
   Bucket,
+  Collection,
   ComponentAddress,
   Decimal,
   Enum,
@@ -26,7 +27,7 @@ import {
   String,
   TransactionSpecError,
   Tuple,
-  Type,
+  BasicType,
   U128,
   U16,
   U32,
@@ -72,35 +73,35 @@ describe('transation spec', () => {
       'Ok(Tuple(Decimal("42.42"),256i128))',
     ],
     [
-      Vec(Type.String, String('foo'), String('bar')),
+      Vec(BasicType.String, String('foo'), String('bar')),
       'Vec<String>("foo","bar")',
     ],
     [
-      Vec(Type.Decimal, Decimal(42.42), Decimal(42.42)),
+      Vec(BasicType.Decimal, Decimal(42.42), Decimal(42.42)),
       'Vec<Decimal>(Decimal("42.42"),Decimal("42.42"))',
     ],
     [
-      List(Type.String, String('foo'), String('bar')),
+      List(BasicType.String, String('foo'), String('bar')),
       'List<String>("foo","bar")',
     ],
     [
-      List(Type.Decimal, Decimal(42.42), Decimal(42.42)),
+      List(BasicType.Decimal, Decimal(42.42), Decimal(42.42)),
       'List<Decimal>(Decimal("42.42"),Decimal("42.42"))',
     ],
     [
-      Set(Type.String, String('foo'), String('bar')),
+      Set(BasicType.String, String('foo'), String('bar')),
       'Set<String>("foo","bar")',
     ],
     [
-      Set(Type.Decimal, Decimal(42.42), Decimal(42.42)),
+      Set(BasicType.Decimal, Decimal(42.42), Decimal(42.42)),
       'Set<Decimal>(Decimal("42.42"),Decimal("42.42"))',
     ],
     [
-      Map(Type.String, Type.String, String('foo'), String('bar')),
+      Map(BasicType.String, BasicType.String, String('foo'), String('bar')),
       'Map<String,String>("foo","bar")',
     ],
     [
-      Map(Type.String, Type.Decimal, String('foo'), Decimal(42.42)),
+      Map(BasicType.String, BasicType.Decimal, String('foo'), Decimal(42.42)),
       'Map<String,Decimal>("foo",Decimal("42.42"))',
     ],
     [PackageAddress('package_foo'), 'PackageAddress("package_foo")'],
@@ -111,6 +112,26 @@ describe('transation spec', () => {
     [Bucket(String('foo')), 'Bucket("foo")'],
     [Bucket(U32(35)), 'Bucket(35u32)'],
   ])('should correctly return %s as %s', (test, expected) => {
+    expect(test).toBe(expected)
+  })
+
+  it.each([
+    [
+      Box(
+        Map(
+          BasicType.String,
+          Collection.Vec(BasicType.U8),
+          String('foo'),
+          Vec(BasicType.U8, U8(1), U8(2), U8(3))
+        )
+      ),
+      'Box(Map<String,Vec<u8>>("foo",Vec<u8>(1u8,2u8,3u8)))',
+    ],
+    [
+      Vec(Collection.Set(BasicType.U8), Set(BasicType.U8, U8(1), U8(2), U8(3))),
+      'Vec<Set<u8>>(Set<u8>(1u8,2u8,3u8))',
+    ],
+  ])('should correctly return complex data type %s as %s', (test, expected) => {
     expect(test).toBe(expected)
   })
 
@@ -144,6 +165,24 @@ describe('transation spec', () => {
       () => U128('340282366920938463463374607431768211456'),
       'Number range exceeded u128',
     ],
+    [
+      () => Vec(BasicType.String, String('foo'), U32(32)),
+      'Vec<String> expects the same type',
+    ],
+    [() => Vec(BasicType.U8, U8(25), U32(25)), 'Vec<u8> expects the same type'],
+    [
+      () => List(BasicType.String, String('foo'), U32(32)),
+      'List<String> expects the same type',
+    ],
+    [
+      () => List(BasicType.U8, U8(25), U32(25)),
+      'List<u8> expects the same type',
+    ],
+    [
+      () => Set(BasicType.String, String('foo'), U32(32)),
+      'Set<String> expects the same type',
+    ],
+    [() => Set(BasicType.U8, U8(25), U32(25)), 'Set<u8> expects the same type'],
   ])('should fail with TransactionSpecError', (test, expected) => {
     expect(test).toThrowError(new TransactionSpecError(expected))
   })

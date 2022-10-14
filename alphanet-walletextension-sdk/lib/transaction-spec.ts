@@ -1,4 +1,4 @@
-export enum Type {
+export enum BasicType {
   I8 = 'i8',
   I16 = 'i16',
   I32 = 'i32',
@@ -18,9 +18,6 @@ export enum Type {
   Box = 'Box',
   Tuple = 'Tuple',
   Result = 'Result',
-  Vec = 'Vec',
-  List = 'List',
-  Set = 'Set',
   Map = 'Map',
   Decimal = 'Decimal',
   PreciseDecimal = 'PreciseDecimal',
@@ -33,6 +30,26 @@ export enum Type {
   Proof = 'Proof',
   NonFungibleId = 'NonFungibleId',
 }
+
+type Vec<T extends string> = `Vec<${T}>`
+type List<T extends string> = `List<${T}>`
+type Set<T extends string> = `Set<${T}>`
+
+export type CollectionType = Vec<BasicType> | List<BasicType> | Set<BasicType>
+
+type Type = BasicType | CollectionType
+
+export const Collection = {
+  Vec: <T extends Type>(type: T): Vec<T> => `Vec<${type}>`,
+  List: <T extends Type>(type: T): List<T> => `List<${type}>`,
+  Set: <T extends Type>(type: T): Set<T> => `Set<${type}>`,
+} as const
+
+export type TypeValue =
+  | Type
+  | `Vec<${CollectionType}>`
+  | `List<${Type | CollectionType}>`
+  | `Set<${Type | CollectionType}>`
 
 export class TransactionSpecError extends Error {
   constructor(errorMessage: string) {
@@ -165,23 +182,64 @@ export const Result = {
   },
 }
 
+const validateType = (
+  type: TypeValue,
+  args: string[],
+  typeReported: TypeValue
+) => {
+  if (type === BasicType.String) {
+    if (args.some((a) => !a.startsWith('"') && !a.endsWith('"'))) {
+      throw new TransactionSpecError(`${typeReported} expects the same type`)
+    }
+  } else if (type === BasicType.Result) {
+    if (args.some((a) => !a.match(/^Ok|^Err/))) {
+      throw new TransactionSpecError(`${typeReported} expects the same type`)
+    }
+  } else if (type === BasicType.Option) {
+    if (args.some((a) => !a.match(/^Some|^None/))) {
+      throw new TransactionSpecError(`${typeReported} expects the same type`)
+    }
+  } else if (type === BasicType.Unit) {
+    if (args.some((a) => a !== '()')) {
+      throw new TransactionSpecError(`${typeReported} expects the same type`)
+    }
+  } else {
+    if (args.some((a) => !a.includes(type))) {
+      throw new TransactionSpecError(`${typeReported} expects the same type`)
+    }
+  }
+}
+
 export const Vec = (type: Type, ...args: string[]): string => {
+  validateType(type, args, Collection.Vec(type))
   return `Vec<${type}>(${args.join(',')})`
 }
 
 export const List = (type: Type, ...args: string[]): string => {
+  validateType(type, args, Collection.List(type))
   return `List<${type}>(${args.join(',')})`
 }
 
 export const Set = (type: Type, ...args: string[]): string => {
+  validateType(type, args, Collection.Set(type))
   return `Set<${type}>(${args.join(',')})`
 }
 
 export const Map = (
-  keyType: Type,
-  valueType: Type,
+  keyType: TypeValue,
+  valueType: TypeValue,
   ...args: string[]
 ): string => {
+  validateType(
+    keyType,
+    args.filter((_, i) => i % 2 === 0),
+    BasicType.Map
+  )
+  validateType(
+    valueType,
+    args.filter((_, i) => i % 2 !== 0),
+    BasicType.Map
+  )
   return `Map<${keyType},${valueType}>(${args.join(',')})`
 }
 
