@@ -35,6 +35,7 @@ import {
   U8,
   Unit,
   Vec,
+  Expression,
 } from '../transaction-spec'
 
 describe('transation spec', () => {
@@ -54,6 +55,7 @@ describe('transation spec', () => {
     [U128('128'), '128u128'],
     [Decimal(42.42), 'Decimal("42.42")'],
     [PreciseDecimal(42.42), 'PreciseDecimal("42.42")'],
+    [Expression('ENTIRE_WORKTOP'), 'Expression("ENTIRE_WORKTOP")'],
     [Enum('Foo'), 'Enum("Foo")'],
     [
       Enum('Foo', String('some string'), Bool(false)),

@@ -285,9 +285,7 @@ export const Bucket = (
   return `Bucket(${bucketId})`
 }
 
-export const Proof = (
-  proofId: string | `${string}u32`
-): `Proof(${string})` => {
+export const Proof = (proofId: string | `${string}u32`): `Proof(${string})` => {
   return `Proof(${proofId})`
 }
 
@@ -295,4 +293,10 @@ export const NonFungibleId = (
   nonFungibleId: string
 ): `NonFungibleId("${string}")` => {
   return `NonFungibleId("${nonFungibleId}")`
+}
+
+export const Expression = <T extends string | 'ENTIRE_WORKTOP'>(
+  expression: T
+): `Expression("${T}")` => {
+  return `Expression("${expression}")`
 }
