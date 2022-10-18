@@ -24,5 +24,6 @@ const WalletSdk = () => {
 }
 
 export { ManifestBuilder } from './manifest'
+export * as TransactionSpec from './transaction-spec'
 
 export default WalletSdk
