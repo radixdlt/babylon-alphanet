@@ -5,7 +5,7 @@ import {
   Bool,
   Box,
   Bucket,
-  Collection,
+  CollectionType,
   ComponentAddress,
   Decimal,
   Enum,
@@ -122,7 +122,7 @@ describe('transation spec', () => {
       Box(
         Map(
           BasicType.String,
-          Collection.Vec(BasicType.U8),
+          CollectionType.Vec(BasicType.U8),
           String('foo'),
           Vec(BasicType.U8, U8(1), U8(2), U8(3))
         )
@@ -130,7 +130,10 @@ describe('transation spec', () => {
       'Box(Map<String,Vec<u8>>("foo",Vec<u8>(1u8,2u8,3u8)))',
     ],
     [
-      Vec(Collection.Set(BasicType.U8), Set(BasicType.U8, U8(1), U8(2), U8(3))),
+      Vec(
+        CollectionType.Set(BasicType.U8),
+        Set(BasicType.U8, U8(1), U8(2), U8(3))
+      ),
       'Vec<Set<u8>>(Set<u8>(1u8,2u8,3u8))',
     ],
   ])('should correctly return complex data type %s as %s', (test, expected) => {

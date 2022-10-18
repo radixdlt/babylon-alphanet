@@ -34,22 +34,32 @@ export enum BasicType {
 type Vec<T extends string> = `Vec<${T}>`
 type List<T extends string> = `List<${T}>`
 type Set<T extends string> = `Set<${T}>`
+type TreeSet<T extends string> = `TreeSet<${T}>`
 
-export type CollectionType = Vec<BasicType> | List<BasicType> | Set<BasicType>
+export type Collection =
+  | Vec<BasicType>
+  | List<BasicType>
+  | Set<BasicType>
+  | TreeSet<BasicType>
 
-type Type = BasicType | CollectionType
+export type Type = BasicType | Collection
+export type ResourceAddressType = `resource_${string}`
+export type AccountAddressType = `account_${string}`
+export type ComponentAddressType = `component_${string}`
+export type PackageAddressType = `package_${string}`
 
-export const Collection = {
+export const CollectionType = {
   Vec: <T extends Type>(type: T): Vec<T> => `Vec<${type}>`,
   List: <T extends Type>(type: T): List<T> => `List<${type}>`,
   Set: <T extends Type>(type: T): Set<T> => `Set<${type}>`,
+  TreeSet: <T extends Type>(type: T): TreeSet<T> => `TreeSet<${type}>`,
 } as const
 
 export type TypeValue =
   | Type
-  | `Vec<${CollectionType}>`
-  | `List<${Type | CollectionType}>`
-  | `Set<${Type | CollectionType}>`
+  | `Vec<${Collection}>`
+  | `List<${Type | Collection}>`
+  | `Set<${Type | Collection}>`
 
 export class TransactionSpecError extends Error {
   constructor(errorMessage: string) {
@@ -210,19 +220,35 @@ const validateType = (
   }
 }
 
-export const Vec = (type: Type, ...args: string[]): string => {
-  validateType(type, args, Collection.Vec(type))
+export const Vec = <T extends Type>(
+  type: T,
+  ...args: string[]
+): `Vec<${T}>(${string})` => {
+  validateType(type, args, CollectionType.Vec(type))
   return `Vec<${type}>(${args.join(',')})`
 }
 
-export const List = (type: Type, ...args: string[]): string => {
-  validateType(type, args, Collection.List(type))
+export const List = <T extends Type>(
+  type: T,
+  ...args: string[]
+): `List<${T}>(${string})` => {
+  validateType(type, args, CollectionType.List(type))
   return `List<${type}>(${args.join(',')})`
 }
 
-export const Set = (type: Type, ...args: string[]): string => {
-  validateType(type, args, Collection.Set(type))
+export const Set = <T extends Type>(
+  type: T,
+  ...args: string[]
+): `Set<${T}>(${string})` => {
+  validateType(type, args, CollectionType.Set(type))
   return `Set<${type}>(${args.join(',')})`
+}
+
+export const TreeSet = <T extends Type>(
+  type: T,
+  set: string[]
+): `TreeSet<${T}>(${string})` => {
+  return `TreeSet<${type}>(${set.join(',')})`
 }
 
 export const Map = (
@@ -258,7 +284,7 @@ export const PackageAddress = (
 }
 
 export const ComponentAddress = (
-  componentAddress: `component_${string}`
+  componentAddress: `component_${string}` | `account_${string}`
 ): `ComponentAddress("${string}")` => {
   return `ComponentAddress("${componentAddress}")`
 }
@@ -299,4 +325,8 @@ export const Expression = <T extends string | 'ENTIRE_WORKTOP'>(
   expression: T
 ): `Expression("${T}")` => {
   return `Expression("${expression}")`
+}
+
+export const Blob = <T extends string>(blob: T): `Blob("${T}")` => {
+  return `Blob("${blob}")`
 }
