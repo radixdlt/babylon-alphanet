@@ -370,6 +370,6 @@ export class ManifestBuilder {
 
     private formatNonFungibleIds(nonFungibleIds: string[]) {
         let ids = nonFungibleIds.map(id => 'NonFungibleId("' + id + '")').join(', ');
-        return 'TreeSet<NonFungibleId>(' + ids + ')';
+        return 'Set<NonFungibleId>(' + ids + ')';
     }
 }
