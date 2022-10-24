@@ -4,7 +4,7 @@ export enum ActionType {
   GetAccountAddressFailure = "getAccountAddressFailure",
   SignTransaction = "signTransaction",
   SignTransactionSuccess = "signTransactionSuccess",
-  SignTransactionFailure = "SignTransactionFailure",
+  SignTransactionFailure = "signTransactionFailure",
 }
 
 export type Action<T extends ActionType, P> = {
