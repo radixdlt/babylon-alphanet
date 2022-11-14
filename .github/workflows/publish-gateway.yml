@@ -11,9 +11,9 @@ jobs:
         working-directory: ./gateway-api-v0/typescript-sdk
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           node-version: "18.x"
           registry-url: "https://registry.npmjs.org"
@@ -34,7 +34,7 @@ jobs:
           release_tag: ${{ github.event.release.tag_name }}
 
       - name: Update package.json version
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@2a0f7d953b580b828717daf4de7fafc7e4135e97
         with:
           file: ./gateway-api-v0/typescript-sdk/package.json
           field: version

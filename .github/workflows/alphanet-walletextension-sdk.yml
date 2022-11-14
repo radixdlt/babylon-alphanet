@@ -15,9 +15,9 @@ jobs:
         working-directory: ./alphanet-walletextension-sdk
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           node-version: "18.x"
           registry-url: 'https://registry.npmjs.org'
@@ -47,14 +47,14 @@ jobs:
           commit_sha: ${{ github.sha }}
           release_tag: ${{ github.event.release.tag_name }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: alphanet-walletextension-sdk-${{ steps.get_version.outputs.babylon_alphanet_version }}
           path: alphanet-walletextension-sdk
 
       - name: Update package.json version
         if: github.event_name == 'release'
-        uses: jossef/action-set-json-field@v2
+        uses: jossef/action-set-json-field@2a0f7d953b580b828717daf4de7fafc7e4135e97
         with:
           file: ./alphanet-walletextension-sdk/package.json
           field: version
