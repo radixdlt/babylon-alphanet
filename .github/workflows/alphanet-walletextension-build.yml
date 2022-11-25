@@ -14,9 +14,9 @@ jobs:
         working-directory: ./alphanet-walletextension
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           node-version: "18.x"
 
@@ -37,17 +37,17 @@ jobs:
           commit_sha: ${{ github.sha }}
           release_tag: ${{ github.event.release.tag_name }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: alphanet-walletextension-${{ steps.get_version.outputs.babylon_alphanet_version }}
           path: alphanet-walletextension/dist
       - name: Dump context
-        uses: crazy-max/ghaction-dump-context@v1
+        uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
 
       - name: Get release
         if: github.event_name == 'release'
         id: get_release
-        uses: bruceadams/get-release@v1.2.2
+        uses: bruceadams/get-release@f589ce0779c7bef1faf175f7488c972eb47dc046
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload distribution zip
         if: github.event_name == 'release'
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
