@@ -27,5 +27,5 @@ runs:
             RELEASE_VERSION="${{ inputs.commit_sha }}"
           fi
           echo "Tag $RELEASE_VERSION"
-          echo "::set-output name=babylon_alphanet_version::$RELEASE_VERSION"
+          echo "babylon_alphanet_version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
       shell: bash
